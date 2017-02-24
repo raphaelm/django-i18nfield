@@ -87,3 +87,13 @@ Formatting also works as expected:
    >>> translation.activate('de')
    >>> '{}'.format(translated)
    'Deutscher String'
+
+There is also a way to construct a hybrid object that takes its data from ``gettext`` but behaves like an
+``LazyI18nString``. The use case for this is very rare, it basically only is useful when defining default
+values for internationalized form fields in the codebase.
+
+.. doctest::
+
+   >>> from django.utils.translation import ugettext_noop
+   >>> LazyI18nString.from_gettext(ugettext_noop('Hello'))
+   <LazyI18nString: <LazyGettextProxy: 'Hello'>>
