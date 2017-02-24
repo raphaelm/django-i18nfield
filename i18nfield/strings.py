@@ -38,7 +38,7 @@ class LazyI18nString:
         """
         return self.localize(translation.get_language() or settings.LANGUAGE_CODE)
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         if not self.data:
             return False
         if isinstance(self.data, dict):
@@ -111,7 +111,7 @@ class LazyI18nString:
             return str(ugettext(self.lazygettext))
 
     @classmethod
-    def from_gettext(cls, lazygettext):
+    def from_gettext(cls, lazygettext) -> LazyI18nString:
         l = LazyI18nString({})
         l.data = cls.LazyGettextProxy(lazygettext)
         return l

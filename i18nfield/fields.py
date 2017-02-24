@@ -27,7 +27,7 @@ class I18nFieldMixin:
         return value
 
     def get_prep_lookup(self, lookup_type, value):  # NOQA
-        raise TypeError('Lookups on i18n string currently not supported.')
+        raise TypeError('Lookups on i18n strings are currently not supported.')
 
     def from_db_value(self, value, expression, connection, context):
         return LazyI18nString(value)
