@@ -82,6 +82,8 @@ argument and passes it through to all its fields.
 For the same reason, we provide formset base classes that add the ``locales`` argument to your
 formset class and pass it through to all fields.
 
+.. autoclass:: i18nfield.forms.I18nForm
+
 .. autoclass:: i18nfield.forms.I18nModelForm
 
 .. autoclass:: i18nfield.forms.I18nModelFormSet

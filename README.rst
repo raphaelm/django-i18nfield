@@ -31,17 +31,22 @@ flexible solution. This approach has been in use in `pretix`_ for quite a while,
 production. The package contains not only the model fields, but also form fields and everything you need
 to get them running.
 
-What works:
+Features
+--------
 
+* Very easy installation
 * Internationalized versions of ``CharField`` and ``TextField`` types
+* Integrated form fields types and widgets
+* Automatic migration from non-localized fields with a simple migration
 * Full support for forms and formsets
+* Possibility to dynamically limit the displayed languages
+* Very basic integration with django admin
+* Comprehensive test suite and production-tested
 
-Not yet implemented (contributions appreciated):
+Tested with:
 
-* Improved django admin integration
-* Comprehensive tests
-
-This is currently only tested with Python 3.4-3.6 and Django 1.9-1.10.
+* Python 3.4 to 3.6
+* Django 1.9 to 1.10
 
 License
 -------

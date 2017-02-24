@@ -1,15 +1,13 @@
-from django import forms
-
-from i18nfield import forms as i18nforms
+from i18nfield import forms
 
 from .models import Book
 
 
-class BookForm(forms.ModelForm):
+class BookForm(forms.I18nModelForm):
     class Meta:
         model = Book
         fields = ['title', 'abstract', 'author']
-        widgets = {
-            'title': i18nforms.I18nTextInput,
-            'abstract': i18nforms.I18nTextarea
-        }
+
+
+class SimpleForm(forms.I18nForm):
+    title = forms.I18nFormField(widget=forms.I18nTextInput)

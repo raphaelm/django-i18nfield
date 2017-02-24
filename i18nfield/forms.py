@@ -3,7 +3,8 @@ from typing import List, Union
 
 from django import forms
 from django.conf import settings
-from django.forms import BaseModelForm, BaseModelFormSet, BaseInlineFormSet
+from django.forms import BaseModelForm, BaseModelFormSet, BaseInlineFormSet, BaseForm
+from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
 from django.utils import six
 from django.utils.safestring import mark_safe
@@ -179,10 +180,7 @@ class I18nFormField(forms.MultiValueField):
         )
 
 
-class BaseI18nModelForm(BaseModelForm):
-    """
-    This is a helperclass to construct an I18nModelForm.
-    """
+class I18nFormMixin:
     def __init__(self, *args, **kwargs):
         locales = kwargs.pop('locales', None)
         super().__init__(*args, **kwargs)
@@ -190,6 +188,33 @@ class BaseI18nModelForm(BaseModelForm):
             for k, field in self.fields.items():
                 if isinstance(field, I18nFormField):
                     field.widget.enabled_locales = locales
+
+
+class BaseI18nModelForm(I18nFormMixin, BaseModelForm):
+    """
+    This is a helperclass to construct an I18nModelForm.
+    """
+    pass
+
+
+class BaseI18nForm(I18nFormMixin, BaseForm):
+    """
+    This is a helperclass to construct an I18nForm.
+    """
+    pass
+
+
+class I18nForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseI18nForm)):
+    """
+    This is a modified version of Django's Form which differs from Form in
+    only one way: The constructor takes one additional optional argument ``locales``
+    expecting a list of language codes. If given, this instance is used to select
+    the visible languages in all I18nFormFields of the form. If not given, all languages
+    from ``settings.LANGUAGES`` will be displayed.
+
+    :param locales: A list of locales that should be displayed.
+    """
+    pass
 
 
 class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
@@ -205,13 +230,7 @@ class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
     pass
 
 
-class I18nModelFormSet(BaseModelFormSet):
-    """
-    This is equivalent to a normal BaseModelFormset, but cares for the special needs
-    of I18nForms (see there for more information).
-
-    :param locales: A list of locales that should be displayed.
-    """
+class I18nFormSetMixin:
 
     def __init__(self, *args, **kwargs):
         self.locales = kwargs.pop('locales', None)
@@ -233,18 +252,21 @@ class I18nModelFormSet(BaseModelFormSet):
         return form
 
 
-class I18nInlineFormSet(BaseInlineFormSet):
+class I18nModelFormSet(I18nFormSetMixin, BaseModelFormSet):
+    """
+    This is equivalent to a normal BaseModelFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+
+    :param locales: A list of locales that should be displayed.
+    """
+    pass
+
+
+class I18nInlineFormSet(I18nFormSetMixin, BaseInlineFormSet):
     """
     This is equivalent to a normal BaseInlineFormset, but cares for the special needs
     of I18nForms (see there for more information).
 
     :param locales: A list of locales that should be displayed.
     """
-
-    def __init__(self, *args, **kwargs):
-        self.locales = kwargs.pop('locales', None)
-        super().__init__(*args, **kwargs)
-
-    def _construct_form(self, i, **kwargs):
-        kwargs['locales'] = self.locales
-        return super()._construct_form(i, **kwargs)
+    pass
