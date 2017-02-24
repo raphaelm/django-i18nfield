@@ -36,7 +36,7 @@ What works:
 
 Not yet implemented (contributions appreciated):
 
-* Integration into django admin
+* Improved django admin integration
 * Comprehensive tests
 
 This is currently only tested with Python 3.4-3.6 and Django 1.10.

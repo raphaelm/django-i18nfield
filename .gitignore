@@ -4,4 +4,4 @@ dist/
 *.egg-info
 env
 .idea/
-
+*.sqlite3

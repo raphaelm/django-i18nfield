@@ -36,6 +36,6 @@ setup(
     install_requires=[
     ],
 
-    packages=find_packages(exclude=['tests', 'tests.*']),
+    packages=find_packages(exclude=['tests', 'tests.*', 'demoproject', 'demoproject.*']),
     include_package_data=True,
 )
