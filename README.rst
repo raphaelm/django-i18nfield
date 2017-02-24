@@ -11,7 +11,7 @@ I18nFields for Django
    :target: https://travis-ci.org/raphaelm/django-i18nfield
 
 .. image:: https://codecov.io/gh/raphaelm/django-i18nfield/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/pretix/pretix
+   :target: https://codecov.io/gh/raphaelm/django-i18nfield
 
 This is yet another way to store multi-lingual content in Django_. In contrast to other options
 like `django-havd`_, `django-modeltranslation`_ or `django-parler`_ it does not require additonal
