@@ -60,6 +60,11 @@ the input field:
       background-image: url('/static/img/flags/en.png');
     }
 
+In pretix, this looks like this:
+
+.. image:: images/example.png
+
+
 Advanced usage: Restrict the visible languages
 ----------------------------------------------
 
