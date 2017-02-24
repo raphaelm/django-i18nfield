@@ -19,7 +19,8 @@ database tables and you can reconfigure the available languages without any chan
 schema. In constrast to `nece`_, it is not specific to PostgreSQL.
 
 How does it work then? It stores JSON data into a ``TextField``. Yes, this is kinda dirty and violates
-the `1NF`_. This makes it harder for non-django based programs to interact directly with your database.
+the `1NF`_. This makes it harder for non-django based programs to interact directly with your database
+and is not perfectly efficient in terms of storage space.
 It also loses you the ability to do useful lookups, searches and indices on internationalized fields.
 If one of those things are important to you, **this project is not for you**, please choose one of the
 ones that we linked above.
