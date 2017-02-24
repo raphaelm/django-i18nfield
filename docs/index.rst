@@ -40,7 +40,6 @@ Documentation content
 
 .. TODO::
    * Document migration from plain models to i18nfields
-   * Document styling
 
 
 .. _pretix: https://github.com/pretix/pretix

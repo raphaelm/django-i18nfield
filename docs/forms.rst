@@ -16,6 +16,50 @@ fields manually as you would use any other field, even completely without touchi
 .. autoclass:: i18nfield.forms.I18nTextarea
 
 
+Widget styling
+--------------
+
+The form widget will output something similar to the following HTML sample:
+
+.. code-block:: html
+
+    <div class="i18n-form-group">
+        <input class="form-control" id="id_name_0" lang="en"
+               maxlength="200" name="name_0" placeholder="Name" title="en"
+               type="text" value="">
+        <input class="form-control" id="id_name_1" lang="de"
+               maxlength="200" name="name_1" placeholder="Name" title="de"
+               type="text" value="">
+    </div>
+
+This alone provides no good indication to your user on which field resembles which language
+(except the title attribute that is visible on mouseover in most browsers). Also, it will
+render the input forms in a row by default, why we find it more understandable if they are
+arranged vertically.
+
+You can achieve all this with a little bit of CSS. We can't give you the full details, as we
+don't know how you style form widgets in general in your project.
+
+To indicate the language, we use the following CSS to draw a little flag at the beginning of
+the input field:
+
+.. code-block:: css
+
+    input[lang] {
+      background: no-repeat 10px center;
+      padding-left: 34px;
+    }
+    textarea[lang] {
+      background: no-repeat 10px 10px;
+      padding-left: 34px;
+    }
+    input[lang=de], textarea[lang=de] {
+      background-image: url('/static/img/flags/de.png');
+    }
+    input[lang=en], textarea[lang=en] {
+      background-image: url('/static/img/flags/en.png');
+    }
+
 Advanced usage: Restrict the visible languages
 ----------------------------------------------
 
