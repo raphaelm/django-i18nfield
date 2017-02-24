@@ -4,4 +4,3 @@ coverage
 codecov
 sphinx
 sphinx-autobuild
-django
