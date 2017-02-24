@@ -36,11 +36,11 @@ Documentation content
    quickstart
    strings
    forms
+   admin
 
 .. TODO::
    * Document migration from plain models to i18nfields
    * Document styling
-   * Document admin integration
 
 
 .. _pretix: https://github.com/pretix/pretix

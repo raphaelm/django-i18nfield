@@ -1,5 +1,5 @@
-Quickstart
-==========
+Getting started
+===============
 
 First of all, you need to install django-i18nfield::
 
