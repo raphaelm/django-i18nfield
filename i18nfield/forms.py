@@ -34,7 +34,6 @@ class I18nWidget(forms.MultiWidget):
     def decompress(self, value) -> List[Union[str, None]]:
         data = []
         first_enabled = None
-        any_filled = False
         any_enabled_filled = False
         if not isinstance(value, LazyI18nString):
             value = LazyI18nString(value)
@@ -46,7 +45,6 @@ class I18nWidget(forms.MultiWidget):
                 ) and lng in value.data
                 else None
             )
-            any_filled = any_filled or (lng in self.enabled_locales and dataline)
             if not first_enabled and lng in self.enabled_locales:
                 first_enabled = i
                 if dataline:

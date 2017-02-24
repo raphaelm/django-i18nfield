@@ -80,3 +80,63 @@ def test_inlineformset_pass_locales_down():
     fs = FormSetClass(locales=['de', 'fr'], instance=a)
     assert fs.forms[0].fields['title'].widget.enabled_locales == ['de', 'fr']
     assert fs.empty_form.fields['title'].widget.enabled_locales == ['de', 'fr']
+
+
+def test_widget():
+    f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
+    rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
+    assert '<input lang="de" name="foo_0" type="text" value="Hallo" />' in rendered
+    assert '<input lang="en" name="foo_1" type="text" value="Hello" />' in rendered
+    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+
+
+def test_widget_empty():
+    f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
+    rendered = f.widget.render('foo', [])
+    assert '<input lang="de" name="foo_0" type="text" />' in rendered
+    assert '<input lang="en" name="foo_1" type="text" />' in rendered
+    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+
+
+def test_widget_required():
+    f = I18nFormField(widget=I18nTextInput, required=True, localize=True)
+    rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
+    assert 'required' not in rendered
+
+
+def test_custom_id():
+    f = I18nFormField(widget=I18nTextInput, required=True, localize=True)
+    rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}), attrs={'id': 'bla'})
+    assert 'id="bla_0"' in rendered
+    assert 'id="bla_1"' in rendered
+
+
+def test_widget_enabled_locales():
+    f = I18nFormField(widget=I18nTextInput, required=False)
+    f.widget.enabled_locales = ['de', 'fr']
+    rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
+    assert '<input lang="de" name="foo_0" type="text" value="Hallo" />' in rendered
+    assert 'lang="en"' not in rendered
+    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+
+
+def test_widget_decompress_naive():
+    f = I18nFormField(widget=I18nTextInput, required=False)
+    assert f.widget.decompress('Foo') == [
+        None, 'Foo', None
+    ]
+
+
+def test_widget_decompress_missing():
+    f = I18nFormField(widget=I18nTextInput, required=False)
+    assert f.widget.decompress({'de': 'Hallo', 'en': 'Hello'}) == [
+        'Hallo', 'Hello', None
+    ]
+
+
+def test_widget_decompress_all_enabled_missing():
+    f = I18nFormField(widget=I18nTextInput, required=False)
+    f.widget.enabled_locales = ['de', 'fr']
+    assert f.widget.decompress({'en': 'Hello'}) == [
+        None, 'Hello', 'Hello'
+    ]
