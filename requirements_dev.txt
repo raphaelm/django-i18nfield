@@ -5,3 +5,5 @@ coverage
 codecov
 sphinx
 sphinx-autobuild
+isort
+flake8

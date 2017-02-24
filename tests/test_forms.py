@@ -1,11 +1,14 @@
 import pytest
 from django.core.exceptions import ValidationError
-from django.forms import modelformset_factory, inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 
-from i18nfield.forms import I18nFormField, I18nTextInput, I18nModelFormSet, I18nInlineFormSet
+from i18nfield.forms import (
+    I18nFormField, I18nInlineFormSet, I18nModelFormSet, I18nTextInput,
+)
 from i18nfield.strings import LazyI18nString
-from .testapp.models import Author, Book
+
 from .testapp.forms import BookForm, SimpleForm
+from .testapp.models import Author, Book
 
 
 def test_field_defaults():

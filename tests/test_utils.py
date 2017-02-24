@@ -1,10 +1,11 @@
 import json
+from decimal import Decimal
 
 import pytest
-from decimal import Decimal
 
 from i18nfield.strings import LazyI18nString
 from i18nfield.utils import I18nJSONEncoder
+
 from .testapp.models import Book
 
 

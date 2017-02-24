@@ -2,7 +2,7 @@ import json
 
 from django.db import models
 
-from .forms import I18nFormField, I18nTextInput, I18nTextarea
+from .forms import I18nFormField, I18nTextarea, I18nTextInput
 from .strings import LazyI18nString
 
 

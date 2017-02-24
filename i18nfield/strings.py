@@ -1,9 +1,9 @@
 import json
-from typing import Optional, Union, Dict
+from typing import Dict, Optional, Union
 
 from django.conf import settings
 from django.utils import translation
-from django.utils.translation import ugettext, override
+from django.utils.translation import override, ugettext
 
 
 class LazyI18nString:

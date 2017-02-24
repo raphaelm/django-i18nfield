@@ -2,6 +2,7 @@ import pytest
 
 from i18nfield.fields import I18nFieldMixin
 from i18nfield.strings import LazyI18nString
+
 from .testapp.models import Author, Book
 
 

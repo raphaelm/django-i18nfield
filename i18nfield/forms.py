@@ -3,7 +3,9 @@ from typing import List, Union
 
 from django import forms
 from django.conf import settings
-from django.forms import BaseModelForm, BaseModelFormSet, BaseInlineFormSet, BaseForm
+from django.forms import (
+    BaseForm, BaseInlineFormSet, BaseModelForm, BaseModelFormSet,
+)
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
 from django.utils import six
