@@ -30,7 +30,7 @@ class I18nWidget(forms.MultiWidget):
             widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
 
-    def decompress(self, value):
+    def decompress(self, value) -> List[Union[str, None]]:
         data = []
         first_enabled = None
         any_filled = False
@@ -57,7 +57,7 @@ class I18nWidget(forms.MultiWidget):
             data[first_enabled] = value.localize(self.enabled_langcodes[0])
         return data
 
-    def render(self, name, value, attrs=None):
+    def render(self, name: str, value, attrs=None) -> str:
         if self.is_localized:
             for widget in self.widgets:
                 widget.is_localized = self.is_localized
@@ -84,7 +84,7 @@ class I18nWidget(forms.MultiWidget):
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs))
         return mark_safe(self.format_output(output))
 
-    def format_output(self, rendered_widgets):
+    def format_output(self, rendered_widgets) -> str:
         return '<div class="i18n-form-group">%s</div>' % super().format_output(rendered_widgets)
 
 
@@ -111,14 +111,14 @@ class I18nFormField(forms.MultiValueField):
         omitted, fields will be rendered for all languages supported by pretix.
     """
 
-    def compress(self, data_list):
+    def compress(self, data_list) -> LazyI18nString:
         langcodes = self.langcodes
         data = {}
         for i, value in enumerate(data_list):
             data[langcodes[i]] = value
         return LazyI18nString(data)
 
-    def clean(self, value):
+    def clean(self, value) -> LazyI18nString:
         if isinstance(value, LazyI18nString):
             # This happens e.g. if the field is disabled
             return value
