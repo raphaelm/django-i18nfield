@@ -17,6 +17,8 @@ class I18nFieldMixin:
     def to_python(self, value):
         if isinstance(value, LazyI18nString):
             return value
+        if value is None:
+            return None
         return LazyI18nString(value)
 
     def get_prep_value(self, value):
