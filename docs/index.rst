@@ -35,9 +35,9 @@ Documentation content
 
    quickstart
    strings
+   forms
 
 .. TODO::
-   * Document forms foo with choice limiting
    * Document migration from plain models to i18nfields
    * Document styling
    * Document admin integration

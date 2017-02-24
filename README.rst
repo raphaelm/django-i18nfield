@@ -13,6 +13,7 @@ I18nFields for Django
 .. image:: https://codecov.io/gh/raphaelm/django-i18nfield/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/raphaelm/django-i18nfield
 
+
 This is yet another way to store multi-lingual content in Django_. In contrast to other options
 like `django-havd`_, `django-modeltranslation`_ or `django-parler`_ it does not require additonal
 database tables and you can reconfigure the available languages without any changes to the database

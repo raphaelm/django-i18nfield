@@ -19,12 +19,12 @@ class I18nWidget(forms.MultiWidget):
     """
     widget = forms.TextInput
 
-    def __init__(self, langcodes: List[str], field: forms.Field, attrs=None):
+    def __init__(self, locales: List[str], field: forms.Field, attrs=None):
         widgets = []
-        self.langcodes = langcodes
-        self.enabled_langcodes = langcodes
+        self.locales = locales
+        self.enabled_locales = locales
         self.field = field
-        for lng in self.langcodes:
+        for lng in self.locales:
             a = copy.copy(attrs) or {}
             a['lang'] = lng
             widgets.append(self.widget(attrs=a))
@@ -37,7 +37,7 @@ class I18nWidget(forms.MultiWidget):
         any_enabled_filled = False
         if not isinstance(value, LazyI18nString):
             value = LazyI18nString(value)
-        for i, lng in enumerate(self.langcodes):
+        for i, lng in enumerate(self.locales):
             dataline = (
                 value.data[lng]
                 if value is not None and (
@@ -45,8 +45,8 @@ class I18nWidget(forms.MultiWidget):
                 ) and lng in value.data
                 else None
             )
-            any_filled = any_filled or (lng in self.enabled_langcodes and dataline)
-            if not first_enabled and lng in self.enabled_langcodes:
+            any_filled = any_filled or (lng in self.enabled_locales and dataline)
+            if not first_enabled and lng in self.enabled_locales:
                 first_enabled = i
                 if dataline:
                     any_enabled_filled = True
@@ -54,7 +54,7 @@ class I18nWidget(forms.MultiWidget):
         if value and not isinstance(value.data, dict):
             data[first_enabled] = value.data
         elif value and not any_enabled_filled:
-            data[first_enabled] = value.localize(self.enabled_langcodes[0])
+            data[first_enabled] = value.localize(self.enabled_locales[0])
         return data
 
     def render(self, name: str, value, attrs=None) -> str:
@@ -69,7 +69,7 @@ class I18nWidget(forms.MultiWidget):
         final_attrs = self.build_attrs(attrs)
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):
-            if self.langcodes[i] not in self.enabled_langcodes:
+            if self.locales[i] not in self.enabled_locales:
                 continue
             try:
                 widget_value = value[i]
@@ -79,7 +79,7 @@ class I18nWidget(forms.MultiWidget):
                 final_attrs = dict(
                     final_attrs,
                     id='%s_%s' % (id_, i),
-                    title=self.langcodes[i]
+                    title=self.locales[i]
                 )
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs))
         return mark_safe(self.format_output(output))
@@ -89,10 +89,18 @@ class I18nWidget(forms.MultiWidget):
 
 
 class I18nTextInput(I18nWidget):
+    """
+    The default form widget for I18nCharField. It makes use of Django's MultiWidget
+    mechanism and does some magic to save you time.
+    """
     widget = forms.TextInput
 
 
 class I18nTextarea(I18nWidget):
+    """
+    The default form widget for I18nTextField. It makes use of Django's MultiWidget
+    mechanism and does some magic to save you time.
+    """
     widget = forms.Textarea
 
 
@@ -107,15 +115,16 @@ class I18nFormField(forms.MultiValueField):
     to fill in all of them. This has the drawback that the HTML property ``required`` is set on
     none of the fields as this would lead to irritating behaviour.
 
-    :param langcodes: An iterable of locale codes that the widget should render a field for. If
-        omitted, fields will be rendered for all languages supported by pretix.
+    :param locales: An iterable of locale codes that the widget should render a field for. If
+                    omitted, fields will be rendered for all languages configured in
+                    ``settings.LANGUAGES``.
     """
 
     def compress(self, data_list) -> LazyI18nString:
-        langcodes = self.langcodes
+        locales = self.locales
         data = {}
         for i, value in enumerate(data_list):
-            data[langcodes[i]] = value
+            data[locales[i]] = value
         return LazyI18nString(data)
 
     def clean(self, value) -> LazyI18nString:
@@ -155,14 +164,14 @@ class I18nFormField(forms.MultiValueField):
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
-        self.langcodes = kwargs.pop('langcodes', [l[0] for l in settings.LANGUAGES])
+        self.locales = kwargs.pop('locales', [l[0] for l in settings.LANGUAGES])
         self.one_required = kwargs.get('required', True)
         kwargs['required'] = False
         kwargs['widget'] = kwargs['widget'](
-            langcodes=self.langcodes, field=self, **kwargs.pop('widget_kwargs', {})
+            locales=self.locales, field=self, **kwargs.pop('widget_kwargs', {})
         )
         defaults.update(**kwargs)
-        for lngcode in self.langcodes:
+        for lngcode in self.locales:
             defaults['label'] = '%s (%s)' % (defaults.get('label'), lngcode)
             fields.append(forms.CharField(**defaults))
         super().__init__(
@@ -180,24 +189,28 @@ class BaseI18nModelForm(BaseModelForm):
         if locales:
             for k, field in self.fields.items():
                 if isinstance(field, I18nFormField):
-                    field.widget.enabled_langcodes = locales
+                    field.widget.enabled_locales = locales
 
 
 class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
     """
     This is a modified version of Django's ModelForm which differs from ModelForm in
-    only one way: The constructor takes one additional optional argument ``event``
-    expecting an `Event` instance. If given, this instance is used to select
+    only one way: The constructor takes one additional optional argument ``locales``
+    expecting a list of language codes. If given, this instance is used to select
     the visible languages in all I18nFormFields of the form. If not given, all languages
-    will be displayed.
+    from ``settings.LANGUAGES`` will be displayed.
+
+    :param locales: A list of locales that should be displayed.
     """
     pass
 
 
-class I18nFormSet(BaseModelFormSet):
+class I18nModelFormSet(BaseModelFormSet):
     """
     This is equivalent to a normal BaseModelFormset, but cares for the special needs
     of I18nForms (see there for more information).
+
+    :param locales: A list of locales that should be displayed.
     """
 
     def __init__(self, *args, **kwargs):
@@ -224,6 +237,8 @@ class I18nInlineFormSet(BaseInlineFormSet):
     """
     This is equivalent to a normal BaseInlineFormset, but cares for the special needs
     of I18nForms (see there for more information).
+
+    :param locales: A list of locales that should be displayed.
     """
 
     def __init__(self, *args, **kwargs):
