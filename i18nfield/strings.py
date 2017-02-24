@@ -110,7 +110,7 @@ class LazyI18nString:
         def __str__(self):
             return str(ugettext(self.lazygettext))
 
-        def __repr__(self):
+        def __repr__(self):  # NOQA
             return '<LazyGettextProxy: %s>' % repr(self.lazygettext)
 
     @classmethod
