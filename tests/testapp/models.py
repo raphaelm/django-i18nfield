@@ -14,7 +14,7 @@ class Author(models.Model):
 class Book(models.Model):
     title = I18nCharField(verbose_name='Book title', max_length=190)
     abstract = I18nTextField(verbose_name='Abstract')
-    author = models.ForeignKey(Author, verbose_name='Author')
+    author = models.ForeignKey('Author', verbose_name='Author')
 
     def __str__(self):
         return str(self.title)

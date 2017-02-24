@@ -28,7 +28,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', i18nfield.fields.I18nCharField(max_length=190, verbose_name='Book title')),
                 ('abstract', i18nfield.fields.I18nTextField(verbose_name='Abstract')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bookshelf.Author', verbose_name='Author')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='testapp.Author',
+                                             verbose_name='Author')),
             ],
         ),
     ]
