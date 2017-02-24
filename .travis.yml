@@ -20,3 +20,5 @@ matrix:
       env: TOXENV=py36-django110-sqlite
     - python: 3.6
       env: TOXENV=coverage
+    - python: 3.6
+      env: TOXENV=doctest

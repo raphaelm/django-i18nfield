@@ -2,3 +2,5 @@ pytest
 tox
 coverage
 codecov
+sphinx
+sphinx-autobuild

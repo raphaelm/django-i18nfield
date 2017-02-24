@@ -4,9 +4,6 @@ I18nFields for Django
 .. image:: https://img.shields.io/pypi/v/django-i18nfield.svg
    :target: https://pypi.python.org/pypi/django-i18nfield
 
-.. image:: https://readthedocs.org/projects/django-i18nfield/badge/?version=latest
-   :target: https://django-i18nfield.readthedocs.io/
-
 .. image:: https://travis-ci.org/raphaelm/django-i18nfield.svg?branch=master
    :target: https://travis-ci.org/raphaelm/django-i18nfield
 
@@ -30,25 +27,21 @@ flexible solution. This approach has been in use in `pretix`_ for quite a while,
 production. The package contains not only the model fields, but also form fields and everything you need
 to get them running.
 
-What works:
+Documentation content
+---------------------
 
-* Internationalized versions of ``CharField`` and ``TextField`` types
-* Full support for forms and formsets
+.. toctree::
+   :maxdepth: 2
 
-Not yet implemented (contributions appreciated):
+   quickstart
+   strings
 
-* Improved django admin integration
-* Comprehensive tests
+.. TODO::
+   * Document forms foo with choice limiting
+   * Document migration from plain models to i18nfields
+   * Document styling
+   * Document admin integration
 
-This is currently only tested with Python 3.4-3.6 and Django 1.9-1.10.
-
-License
--------
-The code in this repository is published under the terms of the Apache License. 
-See the LICENSE file for the complete license text.
-
-This project is maintained by Raphael Michel <mail@raphaelmichel.de>. See the
-AUTHORS file for a list of all the awesome folks who contributed to this project.
 
 .. _pretix: https://github.com/pretix/pretix
 .. _django: https://www.djangoproject.com/
