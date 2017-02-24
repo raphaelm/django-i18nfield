@@ -12,10 +12,14 @@ try:
 except:
     long_description = ''
 
+try:
+    from i18nfield import version
+except ImportError:
+    version = '?'
 
 setup(
     name='django-i18nfield',
-    version='0.0.0',
+    version=version,
     description='Store internationalized strings in Django models',
     long_description=long_description,
     url='https://github.com/raphaelm/django-i18nfield',
