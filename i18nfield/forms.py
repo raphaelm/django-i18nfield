@@ -1,5 +1,5 @@
 import copy
-from typing import List
+from typing import List, Union
 
 from django import forms
 from django.conf import settings

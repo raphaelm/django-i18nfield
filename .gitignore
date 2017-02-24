@@ -5,3 +5,6 @@ dist/
 env
 .idea/
 *.sqlite3
+.cache
+.tox
+htmlcov/
