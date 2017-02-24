@@ -9,3 +9,5 @@ env
 .tox
 htmlcov/
 *.pyc
+.coverage
+
