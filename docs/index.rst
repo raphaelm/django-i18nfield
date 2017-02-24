@@ -38,10 +38,6 @@ Documentation content
    forms
    admin
 
-.. TODO::
-   * Document migration from plain models to i18nfields
-
-
 .. _pretix: https://github.com/pretix/pretix
 .. _django: https://www.djangoproject.com/
 .. _django-havd: https://github.com/KristianOellegaard/django-hvad

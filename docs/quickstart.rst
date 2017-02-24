@@ -40,6 +40,10 @@ You can change your model to store internationalized data like the following:
         abstract = I18nTextField(verbose_name='Abstract')
         author = models.ForeignKey(Author, verbose_name='Author')
 
+Then, create a migration as you would for any database change::
+
+    $ python manage.py makemigrations
+
 And you're done! Really, that's it.
 
 If you now create a ``ModelForm`` for that model, the title and author fields will
