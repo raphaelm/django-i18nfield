@@ -1,7 +1,11 @@
+import copy
 from typing import List
 
 from django import forms
 from django.conf import settings
+from django.forms import BaseModelForm, BaseModelFormSet, BaseInlineFormSet
+from django.forms.models import ModelFormMetaclass
+from django.utils import six
 from django.utils.safestring import mark_safe
 
 from .strings import LazyI18nString
@@ -164,3 +168,68 @@ class I18nFormField(forms.MultiValueField):
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )
+
+
+class BaseI18nModelForm(BaseModelForm):
+    """
+    This is a helperclass to construct an I18nModelForm.
+    """
+    def __init__(self, *args, **kwargs):
+        locales = kwargs.pop('locales', None)
+        super().__init__(*args, **kwargs)
+        if locales:
+            for k, field in self.fields.items():
+                if isinstance(field, I18nFormField):
+                    field.widget.enabled_langcodes = locales
+
+
+class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
+    """
+    This is a modified version of Django's ModelForm which differs from ModelForm in
+    only one way: The constructor takes one additional optional argument ``event``
+    expecting an `Event` instance. If given, this instance is used to select
+    the visible languages in all I18nFormFields of the form. If not given, all languages
+    will be displayed.
+    """
+    pass
+
+
+class I18nFormSet(BaseModelFormSet):
+    """
+    This is equivalent to a normal BaseModelFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.locales = kwargs.pop('locales', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['locales'] = self.locales
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            locales=self.locales
+        )
+        self.add_fields(form, None)
+        return form
+
+
+class I18nInlineFormSet(BaseInlineFormSet):
+    """
+    This is equivalent to a normal BaseInlineFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.locales = kwargs.pop('locales', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['locales'] = self.locales
+        return super()._construct_form(i, **kwargs)
