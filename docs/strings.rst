@@ -17,7 +17,7 @@ to a string and you **do not need to do anything** to make it work.
 This behaviour is intentionally very similar to the ``ugettext_lazy`` method from Django's translation
 layer.
 
-However, when you deal with such strings in python code, you should now how they behave. Therefore,
+However, when you deal with such strings in python code, you should know how they behave. Therefore,
 we have a number of examples for you on this page.
 
 .. testsetup:: *
