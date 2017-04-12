@@ -86,7 +86,7 @@ class I18nWidget(forms.MultiWidget):
         return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets) -> str:
-        return '<div class="i18n-form-group">%s</div>' % super().format_output(rendered_widgets)
+        return '<div class="i18n-form-group">%s</div>' % ''.join(rendered_widgets)
 
 
 class I18nTextInput(I18nWidget):
