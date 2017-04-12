@@ -67,7 +67,7 @@ class I18nWidget(forms.MultiWidget):
         if not isinstance(value, list):
             value = self.decompress(value)
         output = []
-        final_attrs = self.build_attrs(attrs)
+        final_attrs = self.build_attrs(attrs or dict())
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):
             if self.locales[i] not in self.enabled_locales:
