@@ -1,3 +1,7 @@
+from io import StringIO
+
+from lxml import etree
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
@@ -88,17 +92,31 @@ def test_inlineformset_pass_locales_down():
 def test_widget():
     f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
     rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
-    assert '<input lang="de" name="foo_0" type="text" value="Hallo" />' in rendered
-    assert '<input lang="en" name="foo_1" type="text" value="Hello" />' in rendered
-    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+    tree = etree.parse(StringIO(rendered))
+    assert tree.getroot().findall('input')[0].attrib == {
+        'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
+    }
+    assert tree.getroot().findall('input')[1].attrib == {
+        'lang': 'en', 'name': 'foo_1', 'type': 'text', 'value': 'Hello'
+    }
+    assert tree.getroot().findall('input')[2].attrib == {
+        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+    }
 
 
 def test_widget_empty():
     f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
     rendered = f.widget.render('foo', [])
-    assert '<input lang="de" name="foo_0" type="text" />' in rendered
-    assert '<input lang="en" name="foo_1" type="text" />' in rendered
-    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+    tree = etree.parse(StringIO(rendered))
+    assert tree.getroot().findall('input')[0].attrib == {
+        'lang': 'de', 'name': 'foo_0', 'type': 'text'
+    }
+    assert tree.getroot().findall('input')[1].attrib == {
+        'lang': 'en', 'name': 'foo_1', 'type': 'text'
+    }
+    assert tree.getroot().findall('input')[2].attrib == {
+        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+    }
 
 
 def test_widget_required():
@@ -118,9 +136,14 @@ def test_widget_enabled_locales():
     f = I18nFormField(widget=I18nTextInput, required=False)
     f.widget.enabled_locales = ['de', 'fr']
     rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
-    assert '<input lang="de" name="foo_0" type="text" value="Hallo" />' in rendered
-    assert 'lang="en"' not in rendered
-    assert '<input lang="fr" name="foo_2" type="text" />' in rendered
+
+    tree = etree.parse(StringIO(rendered))
+    assert tree.getroot().findall('input')[0].attrib == {
+        'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
+    }
+    assert tree.getroot().findall('input')[1].attrib == {
+        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+    }
 
 
 def test_widget_decompress_naive():

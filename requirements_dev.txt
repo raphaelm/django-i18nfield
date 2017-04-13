@@ -7,3 +7,4 @@ sphinx
 sphinx-autobuild
 isort
 flake8
+lxml
