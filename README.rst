@@ -46,7 +46,7 @@ Features
 Tested with:
 
 * Python 3.4 to 3.6
-* Django 1.9 to 1.10
+* Django 1.9 to 1.11
 
 License
 -------

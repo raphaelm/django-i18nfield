@@ -67,7 +67,7 @@ class I18nWidget(forms.MultiWidget):
         if not isinstance(value, list):
             value = self.decompress(value)
         output = []
-        final_attrs = self.build_attrs(attrs)
+        final_attrs = self.build_attrs(attrs or dict())
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):
             if self.locales[i] not in self.enabled_locales:
@@ -86,7 +86,7 @@ class I18nWidget(forms.MultiWidget):
         return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets) -> str:
-        return '<div class="i18n-form-group">%s</div>' % super().format_output(rendered_widgets)
+        return '<div class="i18n-form-group">%s</div>' % ''.join(rendered_widgets)
 
 
 class I18nTextInput(I18nWidget):
