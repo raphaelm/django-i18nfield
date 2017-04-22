@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, Iterable
 
 from django.conf import settings
 from django.utils import translation

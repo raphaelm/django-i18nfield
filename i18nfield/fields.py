@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.db import models
 
 from .forms import I18nFormField, I18nTextarea, I18nTextInput
@@ -26,6 +27,8 @@ class I18nFieldMixin:
             value = value.data
         if isinstance(value, dict):
             return json.dumps({k: v for k, v in value.items() if v}, sort_keys=True)
+        if isinstance(value, LazyI18nString.LazyGettextProxy):
+            return json.dumps({lng: value[lng] for lng, lngname in settings.LANGUAGES if value[lng]}, sort_keys=True)
         return value
 
     def get_prep_lookup(self, lookup_type, value):  # NOQA
