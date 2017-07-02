@@ -133,6 +133,7 @@ class I18nFormField(forms.MultiValueField):
             # This happens e.g. if the field is disabled
             return value
         found = False
+        found_all = True
         clean_data = []
         errors = []
         for i, field in enumerate(self.fields):
@@ -142,6 +143,8 @@ class I18nFormField(forms.MultiValueField):
                 field_value = None
             if field_value not in self.empty_values:
                 found = True
+            else:
+                found_all = False
             try:
                 clean_data.append(field.clean(field_value))
             except forms.ValidationError as e:
@@ -151,7 +154,7 @@ class I18nFormField(forms.MultiValueField):
                 errors.extend(m for m in e.error_list if m not in errors)
         if errors:
             raise forms.ValidationError(errors)
-        if self.one_required and not found:
+        if self.one_required and not found or self.all_required and not found_all:
             raise forms.ValidationError(self.error_messages['required'], code='required')
 
         out = self.compress(clean_data)
@@ -167,6 +170,7 @@ class I18nFormField(forms.MultiValueField):
         }
         self.locales = kwargs.pop('locales', [l[0] for l in settings.LANGUAGES])
         self.one_required = kwargs.get('required', True)
+        self.all_required = kwargs.pop('all_required', False)
         kwargs['required'] = False
         kwargs['widget'] = kwargs['widget'](
             locales=self.locales, field=self, **kwargs.pop('widget_kwargs', {})
