@@ -144,7 +144,7 @@ class I18nFormField(forms.MultiValueField):
                 field_value = None
             if field_value not in self.empty_values:
                 found = True
-            elif i < len(self.widget.enabled_locales):
+            elif field.locale in self.widget.enabled_locales:
                 found_all = False
             try:
                 clean_data.append(field.clean(field_value))
@@ -181,7 +181,9 @@ class I18nFormField(forms.MultiValueField):
         defaults.update(**kwargs)
         for lngcode in self.locales:
             defaults['label'] = '%s (%s)' % (defaults.get('label'), lngcode)
-            fields.append(forms.CharField(**defaults))
+            field = forms.CharField(**defaults)
+            field.locale = lngcode
+            fields.append(field)
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )

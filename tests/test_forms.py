@@ -70,17 +70,17 @@ def test_require_all_fields_limited_locales_in_form():
     class SimpleRequiredForm(I18nForm):
         title = I18nFormField(widget=I18nTextInput, require_all_fields=True)
 
-    sf = SimpleRequiredForm({'title_0': 'A'}, locales=['en'])
+    sf = SimpleRequiredForm({'title_1': 'A'}, locales=['en'])  # de, en, fr
     assert sf.is_valid()
-    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B'}, locales=['en', 'fr'])
+    sf = SimpleRequiredForm({'title_1': 'A', 'title_2': 'B'}, locales=['en', 'fr'])  # de, en, fr
     assert sf.is_valid()
-    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': 'C'}, locales=['en', 'fr', 'de'])
+    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': 'C'}, locales=['de', 'en', 'fr'])
     assert sf.is_valid()
-    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': ''}, locales=['en', 'fr'])
+    sf = SimpleRequiredForm({'title_1': 'A', 'title_2': ''}, locales=['en', 'fr'])  # de, en, fr
     assert not sf.is_valid()
-    sf = SimpleRequiredForm({'title_0': '', 'title_1': 'B'}, locales=['en', 'fr'])
+    sf = SimpleRequiredForm({'title_1': '', 'title_2': 'B'}, locales=['en', 'fr'])  # de, en, fr
     assert not sf.is_valid()
-    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': ''}, locales=['en', 'fr', 'de'])
+    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': ''}, locales=['de', 'en', 'fr'])
     assert not sf.is_valid()
 
 
