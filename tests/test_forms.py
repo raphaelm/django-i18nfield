@@ -50,17 +50,20 @@ def test_all_required():
     f = I18nFormField(widget=I18nTextInput, all_required=True)
     assert f.clean(['A', 'B', 'C'])
     with pytest.raises(ValidationError):
-        assert f.clean(['A', '', ''])
-        assert f.clean(['', 'B', ''])
-        assert f.clean(['', '', 'C'])
+        f.clean(['A', '', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', 'B', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', '', 'C'])
 
 
 def test_all_required_limited_locales():
     f = I18nFormField(widget=I18nTextInput, all_required=True, locales=['de', 'fr'])
     assert f.clean(['A', 'B'])
     with pytest.raises(ValidationError):
-        assert f.clean(['A', ''])
-        assert f.clean(['', 'B'])
+        f.clean(['A', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', 'B'])
 
 
 def test_max_length():
