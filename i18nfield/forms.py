@@ -122,10 +122,10 @@ class I18nFormField(forms.MultiValueField):
     :param all_required: A boolean, if set to True field requires all translations to be given.
     """
 
-    default_error_messages = {
-        'all_required': 'This field requires all translations',
+    default_error_messages = dict(
+        all_required='This field requires all translations',
         **forms.MultiValueField.default_error_messages
-    }
+    )
 
     def compress(self, data_list) -> LazyI18nString:
         locales = self.locales
