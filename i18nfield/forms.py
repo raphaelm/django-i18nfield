@@ -119,7 +119,13 @@ class I18nFormField(forms.MultiValueField):
     :param locales: An iterable of locale codes that the widget should render a field for. If
                     omitted, fields will be rendered for all languages configured in
                     ``settings.LANGUAGES``.
+    :param all_required: A boolean, if set to True field requires all translations to be given.
     """
+
+    default_error_messages = {
+        'all_required': 'This field requires all translations',
+        **forms.MultiValueField.default_error_messages
+    }
 
     def compress(self, data_list) -> LazyI18nString:
         locales = self.locales
@@ -154,8 +160,10 @@ class I18nFormField(forms.MultiValueField):
                 errors.extend(m for m in e.error_list if m not in errors)
         if errors:
             raise forms.ValidationError(errors)
-        if self.one_required and not found or self.all_required and not found_all:
+        if self.one_required and not found:
             raise forms.ValidationError(self.error_messages['required'], code='required')
+        if self.all_required and not found_all:
+            raise forms.ValidationError(self.error_messages['all_required'], code='all_required')
 
         out = self.compress(clean_data)
         self.validate(out)
