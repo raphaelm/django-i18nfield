@@ -119,7 +119,7 @@ class I18nFormField(forms.MultiValueField):
     :param locales: An iterable of locale codes that the widget should render a field for. If
                     omitted, fields will be rendered for all languages configured in
                     ``settings.LANGUAGES``.
-    :param all_required: A boolean, if set to True field requires all translations to be given.
+    :param require_all_fields: A boolean, if set to True field requires all translations to be given.
     """
 
     def compress(self, data_list) -> LazyI18nString:
@@ -144,7 +144,7 @@ class I18nFormField(forms.MultiValueField):
                 field_value = None
             if field_value not in self.empty_values:
                 found = True
-            else:
+            elif i < len(self.widget.enabled_locales):
                 found_all = False
             try:
                 clean_data.append(field.clean(field_value))
@@ -157,7 +157,7 @@ class I18nFormField(forms.MultiValueField):
             raise forms.ValidationError(errors)
         if self.one_required and not found:
             raise forms.ValidationError(self.error_messages['required'], code='required')
-        if self.all_required and not found_all:
+        if self.require_all_fields and not found_all:
             raise forms.ValidationError(self.error_messages['incomplete'], code='incomplete')
 
         out = self.compress(clean_data)
@@ -173,7 +173,7 @@ class I18nFormField(forms.MultiValueField):
         }
         self.locales = kwargs.pop('locales', [l[0] for l in settings.LANGUAGES])
         self.one_required = kwargs.get('required', True)
-        self.all_required = kwargs.pop('all_required', False)
+        require_all_fields = kwargs.pop('require_all_fields', False)
         kwargs['required'] = False
         kwargs['widget'] = kwargs['widget'](
             locales=self.locales, field=self, **kwargs.pop('widget_kwargs', {})
@@ -185,6 +185,7 @@ class I18nFormField(forms.MultiValueField):
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )
+        self.require_all_fields = require_all_fields
 
 
 class I18nFormMixin:
