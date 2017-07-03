@@ -122,11 +122,6 @@ class I18nFormField(forms.MultiValueField):
     :param all_required: A boolean, if set to True field requires all translations to be given.
     """
 
-    default_error_messages = dict(
-        all_required='This field requires all translations',
-        **forms.MultiValueField.default_error_messages
-    )
-
     def compress(self, data_list) -> LazyI18nString:
         locales = self.locales
         data = {}
@@ -163,7 +158,7 @@ class I18nFormField(forms.MultiValueField):
         if self.one_required and not found:
             raise forms.ValidationError(self.error_messages['required'], code='required')
         if self.all_required and not found_all:
-            raise forms.ValidationError(self.error_messages['all_required'], code='all_required')
+            raise forms.ValidationError(self.error_messages['incomplete'], code='incomplete')
 
         out = self.compress(clean_data)
         self.validate(out)
