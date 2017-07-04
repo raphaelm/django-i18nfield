@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
 
 from i18nfield.forms import (
-    I18nFormField, I18nInlineFormSet, I18nModelFormSet, I18nTextInput,
+    I18nFormField, I18nInlineFormSet, I18nModelFormSet, I18nTextInput, I18nForm
 )
 from i18nfield.strings import LazyI18nString
 
@@ -44,6 +44,44 @@ def test_required():
 def test_not_required():
     f = I18nFormField(widget=I18nTextInput, required=False)
     f.clean(['', ''])
+
+
+def test_require_all_fields():
+    f = I18nFormField(widget=I18nTextInput, require_all_fields=True)
+    assert f.clean(['A', 'B', 'C'])
+    with pytest.raises(ValidationError):
+        f.clean(['A', '', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', 'B', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', '', 'C'])
+
+
+def test_require_all_fields_limited_locales():
+    f = I18nFormField(widget=I18nTextInput, require_all_fields=True, locales=['de', 'fr'])
+    assert f.clean(['A', 'B'])
+    with pytest.raises(ValidationError):
+        f.clean(['A', ''])
+    with pytest.raises(ValidationError):
+        f.clean(['', 'B'])
+
+
+def test_require_all_fields_limited_locales_in_form():
+    class SimpleRequiredForm(I18nForm):
+        title = I18nFormField(widget=I18nTextInput, require_all_fields=True)
+
+    sf = SimpleRequiredForm({'title_1': 'A'}, locales=['en'])  # de, en, fr
+    assert sf.is_valid()
+    sf = SimpleRequiredForm({'title_1': 'A', 'title_2': 'B'}, locales=['en', 'fr'])  # de, en, fr
+    assert sf.is_valid()
+    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': 'C'}, locales=['de', 'en', 'fr'])
+    assert sf.is_valid()
+    sf = SimpleRequiredForm({'title_1': 'A', 'title_2': ''}, locales=['en', 'fr'])  # de, en, fr
+    assert not sf.is_valid()
+    sf = SimpleRequiredForm({'title_1': '', 'title_2': 'B'}, locales=['en', 'fr'])  # de, en, fr
+    assert not sf.is_valid()
+    sf = SimpleRequiredForm({'title_0': 'A', 'title_1': 'B', 'title_2': ''}, locales=['de', 'en', 'fr'])
+    assert not sf.is_valid()
 
 
 def test_max_length():
