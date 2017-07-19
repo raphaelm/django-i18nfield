@@ -2,10 +2,10 @@ Working with translated strings
 ===============================
 
 If you want to save multi-lingual data into an ``I18nCharField`` or ``I18nTextField``,
-you need to wrap it as an ``I18nLazyString`` first. Also, if you read data from such
-a field, you will always get an ``I18nLazyString`` back.
+you need to wrap it as an ``LazyI18nString`` first. Also, if you read data from such
+a field, you will always get an ``LazyI18nString`` back.
 
-An ``I18nLazyString`` is a representation of a string that exists in multiple languages.
+An ``LazyI18nString`` is a representation of a string that exists in multiple languages.
 Under the hood, it is just a dictionary that maps languages to values.
 
 So why don't we just use dictionaries? This is where the "**lazy**" comes into play: As soon
