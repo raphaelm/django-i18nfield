@@ -15,7 +15,7 @@ I18nFields for Django
 
 
 This is yet another way to store multi-lingual content in Django_. In contrast to other options
-like `django-havd`_, `django-modeltranslation`_ or `django-parler`_ it does not require additonal
+like `django-hvad`_, `django-modeltranslation`_ or `django-parler`_ it does not require additonal
 database tables and you can reconfigure the available languages without any changes to the database
 schema. In constrast to `nece`_, it is not specific to PostgreSQL.
 
@@ -58,7 +58,7 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 
 .. _pretix: https://github.com/pretix/pretix
 .. _django: https://www.djangoproject.com/
-.. _django-havd: https://github.com/KristianOellegaard/django-hvad
+.. _django-hvad: https://github.com/KristianOellegaard/django-hvad
 .. _django-modeltranslation: https://github.com/deschler/django-modeltranslation
 .. _django-parler: https://github.com/django-parler/django-parler
 .. _nece: https://pypi.python.org/pypi/nece
