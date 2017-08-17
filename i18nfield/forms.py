@@ -47,8 +47,9 @@ class I18nWidget(forms.MultiWidget):
                 ) and lng in value.data
                 else None
             )
-            if not first_enabled and lng in self.enabled_locales:
-                first_enabled = i
+            if lng in self.enabled_locales:
+                if not first_enabled:
+                    first_enabled = i
                 if dataline:
                     any_enabled_filled = True
             data.append(dataline)
