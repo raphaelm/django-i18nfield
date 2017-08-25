@@ -204,3 +204,10 @@ def test_widget_decompress_all_enabled_missing():
     assert f.widget.decompress({'en': 'Hello'}) == [
         None, 'Hello', 'Hello'
     ]
+
+def test_widget_decompress_first_two_enabled_not_filled():
+    f = I18nFormField(widget=I18nTextInput, required=False)
+    f.widget.enabled_locales = ['de', 'en', 'fr']
+    assert f.widget.decompress({'fr': 'Bonjour'}) == [
+        None, None, 'Bonjour'
+    ]
