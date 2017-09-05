@@ -53,7 +53,7 @@ class I18nWidget(forms.MultiWidget):
                 if dataline:
                     any_enabled_filled = True
             data.append(dataline)
-        if value and not isinstance(value.data, dict):
+        if value and not isinstance(value.data, dict) and not isinstance(value.data, LazyI18nString.LazyGettextProxy):
             data[first_enabled] = value.data
         elif value and not any_enabled_filled:
             data[first_enabled] = value.localize(self.enabled_locales[0])
