@@ -41,6 +41,7 @@ Features
 * Full support for forms and formsets
 * Possibility to dynamically limit the displayed languages
 * Very basic integration with django admin
+* Integration with Django Restframework
 * Comprehensive test suite and production-tested
 
 Tested with:
