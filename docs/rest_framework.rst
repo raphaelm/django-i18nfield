@@ -15,3 +15,11 @@ compared to a regular ``ModelSerializer``, you should be able to use
         class Meta:
             model = Book
             fields = ('title',)
+
+You can also configure a subclass of the default JSON renderer that handles
+I18nStrings gracefully, by adding it in your ``settings.py``.
+
+.. code-block:: python
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': ('i18nfield.rest_framework.I18nJSONRenderer',),
+    }
