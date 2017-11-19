@@ -19,6 +19,8 @@ class I18nField(Field):
         super().__init__(**kwargs)
 
     def to_representation(self, value):
+        if isinstance(value, str):
+            return value
         if value is None or value.data is None:
             return None
         if isinstance(value.data, dict):
