@@ -1,0 +1,17 @@
+pypi:
+    script:
+        - cp /keys/.pypirc ~/.pypirc
+        - virtualenv env
+        - source env/bin/activate
+        - XDG_CACHE_HOME=/cache pip3 install -U pip wheel setuptools
+        - python setup.py sdist develop
+        - python setup.py sdist clean
+        - python setup.py sdist upload
+        - python setup.py bdist_wheel upload
+    tags:
+        - python3
+    only:
+        - pypi
+    artifacts:
+        paths:
+            - dist/
