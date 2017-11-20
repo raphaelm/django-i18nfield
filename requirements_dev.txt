@@ -1,5 +1,6 @@
 pytest
 pytest-django
+djangorestframework
 tox
 coverage
 codecov
