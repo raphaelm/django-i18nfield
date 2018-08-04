@@ -59,7 +59,7 @@ class I18nWidget(forms.MultiWidget):
             data[first_enabled] = value.localize(self.enabled_locales[0])
         return data
 
-    def render(self, name: str, value, attrs=None) -> str:
+    def render(self, name: str, value, attrs=None, renderer=None) -> str:
         if self.is_localized:
             for widget in self.widgets:
                 widget.is_localized = self.is_localized
@@ -83,7 +83,7 @@ class I18nWidget(forms.MultiWidget):
                     id='%s_%s' % (id_, i),
                     title=self.locales[i]
                 )
-            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs))
+            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
         return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets) -> str:
