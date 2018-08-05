@@ -257,6 +257,7 @@ class I18nFormSetMixin:
             auto_id=self.auto_id,
             prefix=self.add_prefix('__prefix__'),
             empty_permitted=True,
+            use_required_attribute=False,
             locales=self.locales
         )
         self.add_fields(form, None)

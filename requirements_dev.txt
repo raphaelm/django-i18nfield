@@ -8,4 +8,6 @@ sphinx
 sphinx-autobuild
 isort
 flake8
-lxml
+lxml>=4.2.4
+html5lib
+

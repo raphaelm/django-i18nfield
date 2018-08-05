@@ -1,6 +1,6 @@
 from io import StringIO
 
-from lxml import etree
+from lxml.html import html5parser
 
 import pytest
 from django.core.exceptions import ValidationError
@@ -130,14 +130,14 @@ def test_inlineformset_pass_locales_down():
 def test_widget():
     f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
     rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
-    tree = etree.parse(StringIO(rendered))
-    assert tree.getroot().findall('input')[0].attrib == {
+    tree = html5parser.fromstring(rendered)
+    assert tree[0].attrib == {
         'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
     }
-    assert tree.getroot().findall('input')[1].attrib == {
+    assert tree[1].attrib == {
         'lang': 'en', 'name': 'foo_1', 'type': 'text', 'value': 'Hello'
     }
-    assert tree.getroot().findall('input')[2].attrib == {
+    assert tree[2].attrib == {
         'lang': 'fr', 'name': 'foo_2', 'type': 'text'
     }
 
@@ -145,14 +145,14 @@ def test_widget():
 def test_widget_empty():
     f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
     rendered = f.widget.render('foo', [])
-    tree = etree.parse(StringIO(rendered))
-    assert tree.getroot().findall('input')[0].attrib == {
+    tree = html5parser.fromstring(rendered)
+    assert tree[0].attrib == {
         'lang': 'de', 'name': 'foo_0', 'type': 'text'
     }
-    assert tree.getroot().findall('input')[1].attrib == {
+    assert tree[1].attrib == {
         'lang': 'en', 'name': 'foo_1', 'type': 'text'
     }
-    assert tree.getroot().findall('input')[2].attrib == {
+    assert tree[2].attrib == {
         'lang': 'fr', 'name': 'foo_2', 'type': 'text'
     }
 
@@ -175,11 +175,11 @@ def test_widget_enabled_locales():
     f.widget.enabled_locales = ['de', 'fr']
     rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
 
-    tree = etree.parse(StringIO(rendered))
-    assert tree.getroot().findall('input')[0].attrib == {
+    tree = html5parser.fromstring(rendered)
+    assert tree[0].attrib == {
         'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
     }
-    assert tree.getroot().findall('input')[1].attrib == {
+    assert tree[1].attrib == {
         'lang': 'fr', 'name': 'foo_2', 'type': 'text'
     }
 
