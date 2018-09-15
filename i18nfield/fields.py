@@ -34,7 +34,7 @@ class I18nFieldMixin:
     def get_prep_lookup(self, lookup_type, value):  # NOQA
         raise TypeError('Lookups on i18n strings are currently not supported.')
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection, context=None):
         return LazyI18nString(value)
 
     def formfield(self, **kwargs):
