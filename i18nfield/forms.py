@@ -141,7 +141,7 @@ class I18nFormField(forms.MultiValueField):
         for i, field in enumerate(self.fields):
             try:
                 field_value = value[i]
-            except IndexError:
+            except (IndexError, TypeError):
                 field_value = None
             if field_value not in self.empty_values:
                 found = True
