@@ -1,4 +1,5 @@
 language: python
+dist: xenial
 sudo: false
 install:
   - pip install tox
@@ -16,12 +17,18 @@ matrix:
       env: TOXENV=py35-django20-sqlite
     - python: 3.5
       env: TOXENV=py35-django21-sqlite
+    - python: 3.5
+      env: TOXENV=py35-django22-sqlite
     - python: 3.6
       env: TOXENV=py36-django111-sqlite
     - python: 3.6
       env: TOXENV=py36-django20-sqlite
     - python: 3.6
       env: TOXENV=py36-django21-sqlite
+    - python: 3.6
+      env: TOXENV=py36-django22-sqlite
+    - python: 3.7
+      env: TOXENV=py37-django22-sqlite
     - python: 3.6
       env: TOXENV=coverage
     - python: 3.6
