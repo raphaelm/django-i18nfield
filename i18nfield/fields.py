@@ -1,5 +1,6 @@
 import json
 
+import django
 from django.conf import settings
 from django.db import models
 
@@ -34,8 +35,12 @@ class I18nFieldMixin:
     def get_prep_lookup(self, lookup_type, value):  # NOQA
         raise TypeError('Lookups on i18n strings are currently not supported.')
 
-    def from_db_value(self, value, expression, connection, context=None):
-        return LazyI18nString(value)
+    if django.VERSION < (2,):
+        def from_db_value(self, value, expression, connection, context):
+            return LazyI18nString(value)
+    else:
+        def from_db_value(self, value, expression, connection):
+            return LazyI18nString(value)
 
     def formfield(self, **kwargs):
         defaults = {'form_class': self.form_class, 'widget': self.widget}
