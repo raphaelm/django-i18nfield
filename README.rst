@@ -46,8 +46,8 @@ Features
 
 Compatible with:
 
-* Python 3.4 to 3.6
-* Django 1.11 to 2.1
+* Python 3.4 to 3.7
+* Django 1.11 to 2.2
 
 License
 -------
