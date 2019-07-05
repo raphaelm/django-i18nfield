@@ -8,7 +8,6 @@ from django.forms import (
 )
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
-from django.utils import six
 from django.utils.safestring import mark_safe
 
 from .strings import LazyI18nString
@@ -215,7 +214,7 @@ class BaseI18nForm(I18nFormMixin, BaseForm):
     pass
 
 
-class I18nForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseI18nForm)):
+class I18nForm(BaseI18nForm, metaclass=DeclarativeFieldsMetaclass):
     """
     This is a modified version of Django's Form which differs from Form in
     only one way: The constructor takes one additional optional argument ``locales``
@@ -228,7 +227,7 @@ class I18nForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseI18nForm)):
     pass
 
 
-class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
+class I18nModelForm(BaseI18nModelForm, metaclass=ModelFormMetaclass):
     """
     This is a modified version of Django's ModelForm which differs from ModelForm in
     only one way: The constructor takes one additional optional argument ``locales``
