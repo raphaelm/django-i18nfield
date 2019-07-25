@@ -73,10 +73,12 @@ class LazyI18nString:
                         return self.data.get(s)
             elif self.data.get(settings.LANGUAGE_CODE):
                 return self.data[settings.LANGUAGE_CODE]
-            elif len(self.data):
-                return list(self.data.items())[0][1]
             else:
-                return ""
+                filled = [f for f in self.data.values() if f]
+                if filled:
+                    return filled[0]
+                else:
+                    return ""
         else:
             return str(self.data)
 
