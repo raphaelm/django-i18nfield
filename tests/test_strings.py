@@ -130,7 +130,7 @@ def test_from_gettext():
     assert 'de' in lstr.data
     assert lstr.data['en'] == 'Welcome'
 
-def test_transform():
+def test_map():
     data = {
         'de': 'hallo',
         'en': 'hello'
@@ -140,7 +140,7 @@ def test_transform():
     assert str(s) == 'hello'
     translation.activate('de')
     assert str(s) == 'hallo'
-    s.transform(lambda s: s.capitalize())
+    s.map(lambda s: s.capitalize())
     translation.activate('en')
     assert str(s) == 'Hello'
     translation.activate('de')

@@ -88,11 +88,11 @@ Formatting also works as expected:
    >>> '{}'.format(translated)
    'Deutscher String'
 
-If we want to modify all translations inside a ``LazyI18nString`` we can do so using the ``transform`` method:
+If we want to modify all translations inside a ``LazyI18nString`` we can do so using the ``map`` method:
 
 .. doctest::
 
-   >>> translated.transform(lambda s: s.replace('String','Text'))
+   >>> translated.map(lambda s: s.replace('String','Text'))
    >>> translation.activate('de')
    >>> str(translated)
    'Deutscher Text'
