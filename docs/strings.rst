@@ -88,6 +88,15 @@ Formatting also works as expected:
    >>> '{}'.format(translated)
    'Deutscher String'
 
+If we want to modify all translations inside a ``LazyI18nString`` we can do so using the ``transform`` method:
+
+.. doctest::
+
+   >>> translated.transform(lambda s: s.replace('String','Text'))
+   >>> translation.activate('de')
+   >>> str(translated)
+   'Deutscher Text'
+
 There is also a way to construct a hybrid object that takes its data from ``gettext`` but behaves like an
 ``LazyI18nString``. The use case for this is very rare, it basically only is useful when defining default
 values for internationalized form fields in the codebase.
