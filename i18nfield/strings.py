@@ -82,7 +82,7 @@ class LazyI18nString:
         else:
             return str(self.data)
 
-    def transform(self,f):
+    def transform(self, f):
         """
         Apply a transformation function f to all translations.
         """
