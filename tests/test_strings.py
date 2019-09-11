@@ -129,3 +129,19 @@ def test_from_gettext():
     lstr = LazyI18nString.from_gettext(gstr)
     assert 'de' in lstr.data
     assert lstr.data['en'] == 'Welcome'
+
+def test_transform():
+    data = {
+        'de': 'hallo',
+        'en': 'hello'
+    }
+    s = LazyI18nString(data)
+    translation.activate('en')
+    assert str(s) == 'hello'
+    translation.activate('de')
+    assert str(s) == 'hallo'
+    s.transform(lambda s: s.capitalize())
+    translation.activate('en')
+    assert str(s) == 'Hello'
+    translation.activate('de')
+    assert str(s) == 'Hallo'

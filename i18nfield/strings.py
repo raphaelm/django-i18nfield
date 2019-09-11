@@ -82,6 +82,12 @@ class LazyI18nString:
         else:
             return str(self.data)
 
+    def transform(self,f):
+        """
+        Apply a transformation function f to all translations.
+        """
+        self.data = {k: f(v) for k, v in self.data.items()}
+
     def __repr__(self) -> str:  # NOQA
         return '<LazyI18nString: %s>' % repr(self.data)
 
