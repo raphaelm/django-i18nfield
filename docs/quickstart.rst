@@ -9,7 +9,7 @@ You should also check that your ``settings.py`` lists the languages that you wan
 
 .. code-block:: python
 
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
 
     LANGUAGES = [
         ('de', _('German')),

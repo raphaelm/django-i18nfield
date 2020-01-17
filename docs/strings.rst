@@ -14,7 +14,7 @@ into a normal string -- based on the currently active language. This means that 
 a value from an ``I18nCharField`` and pass it to a template, the template will cast the value
 to a string and you **do not need to do anything** to make it work.
 
-This behaviour is intentionally very similar to the ``ugettext_lazy`` method from Django's translation
+This behaviour is intentionally very similar to the ``gettext_lazy`` method from Django's translation
 layer.
 
 However, when you deal with such strings in python code, you should know how they behave. Therefore,
