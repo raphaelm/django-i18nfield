@@ -103,6 +103,6 @@ values for internationalized form fields in the codebase.
 
 .. doctest::
 
-   >>> from django.utils.translation import ugettext_noop
-   >>> LazyI18nString.from_gettext(ugettext_noop('Hello'))
+   >>> from django.utils.translation import gettext_noop
+   >>> LazyI18nString.from_gettext(gettext_noop('Hello'))
    <LazyI18nString: <LazyGettextProxy: 'Hello'>>
