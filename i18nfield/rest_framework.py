@@ -1,4 +1,8 @@
 from django.conf import settings
+
+from .fields import I18nCharField, I18nTextField
+from .strings import LazyI18nString
+
 try:
     from rest_framework.exceptions import ValidationError
     from rest_framework.fields import Field
@@ -7,9 +11,6 @@ try:
     from rest_framework.utils.encoders import JSONEncoder
 except ImportError:
     ValidationError = Field = ModelSerializer = JSONRenderer = JSONEncoder = object
-
-from .fields import I18nCharField, I18nTextField
-from .strings import LazyI18nString
 
 
 class I18nRestFrameworkEncoder(JSONEncoder):

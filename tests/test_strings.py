@@ -130,6 +130,7 @@ def test_from_gettext():
     assert 'de' in lstr.data
     assert lstr.data['en'] == 'Welcome'
 
+
 def test_map():
     data = {
         'de': 'hallo',

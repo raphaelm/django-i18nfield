@@ -1,9 +1,9 @@
 import json
-from typing import Dict, Optional, Union, Iterable
+from typing import Dict, Optional, Union
 
 from django.conf import settings
 from django.utils import translation
-from django.utils.translation import override, gettext
+from django.utils.translation import gettext, override
 
 
 class LazyI18nString:
@@ -62,7 +62,10 @@ class LazyI18nString:
 
         if isinstance(self.data, dict):
             firstpart = lng.split('-')[0]
-            similar = [l for l in self.data.keys() if (l.startswith(firstpart + "-") or firstpart == l) and l != lng]
+            similar = [
+                loc for loc in self.data.keys()
+                if (loc.startswith(firstpart + "-") or firstpart == loc) and loc != lng
+            ]
             if self.data.get(lng):
                 return self.data[lng]
             elif self.data.get(firstpart):
@@ -123,6 +126,6 @@ class LazyI18nString:
 
     @classmethod
     def from_gettext(cls, lazygettext) -> 'LazyI18nString':
-        l = LazyI18nString({})
-        l.data = cls.LazyGettextProxy(lazygettext)
-        return l
+        result = LazyI18nString({})
+        result.data = cls.LazyGettextProxy(lazygettext)
+        return result
