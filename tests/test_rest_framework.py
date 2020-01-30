@@ -3,8 +3,8 @@ import json
 import pytest
 from rest_framework.exceptions import ValidationError
 
-from i18nfield.strings import LazyI18nString
 from i18nfield.rest_framework import I18nField, I18nRestFrameworkEncoder
+from i18nfield.strings import LazyI18nString
 
 
 @pytest.mark.parametrize('string', (

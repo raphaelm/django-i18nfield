@@ -1,5 +1,5 @@
 from django.utils import translation
-from django.utils.translation import ugettext_noop
+from django.utils.translation import gettext_noop
 
 from i18nfield.strings import LazyI18nString
 
@@ -125,10 +125,11 @@ def test_equality():
 
 
 def test_from_gettext():
-    gstr = ugettext_noop('Welcome')
+    gstr = gettext_noop('Welcome')
     lstr = LazyI18nString.from_gettext(gstr)
     assert 'de' in lstr.data
     assert lstr.data['en'] == 'Welcome'
+
 
 def test_map():
     data = {

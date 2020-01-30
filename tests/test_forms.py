@@ -1,13 +1,11 @@
-from io import StringIO
-
-from lxml.html import html5parser
-
 import pytest
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
+from lxml.html import html5parser
 
 from i18nfield.forms import (
-    I18nFormField, I18nInlineFormSet, I18nModelFormSet, I18nTextInput, I18nForm
+    I18nForm, I18nFormField, I18nInlineFormSet, I18nModelFormSet,
+    I18nTextInput,
 )
 from i18nfield.strings import LazyI18nString
 
@@ -204,6 +202,7 @@ def test_widget_decompress_all_enabled_missing():
     assert f.widget.decompress({'en': 'Hello'}) == [
         None, 'Hello', 'Hello'
     ]
+
 
 def test_widget_decompress_first_two_enabled_not_filled():
     f = I18nFormField(widget=I18nTextInput, required=False)
