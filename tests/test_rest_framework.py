@@ -16,14 +16,14 @@ def test_encode_json(string):
 
 
 @pytest.mark.parametrize('value,expected', (
-    ('something', 'something'),
+    ('something', {'en': 'something'}),
     (None, None),
     (LazyI18nString(None), None),
     (LazyI18nString(1.5), {'en': '1.5'}),
     (LazyI18nString('foo'), {'en': 'foo'}),
     (LazyI18nString({'en': 'foo'}), {'en': 'foo'}),
     (LazyI18nString({'de': 'etwas'}), {'de': 'etwas'}),
-    (1.5, None),
+    (1.5, {'en': '1.5'}),
 ))
 def test_i18n_field_representation(value, expected):
     assert I18nField().to_representation(value) == expected
