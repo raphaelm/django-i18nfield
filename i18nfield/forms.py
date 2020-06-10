@@ -174,7 +174,7 @@ class I18nFormField(forms.MultiValueField):
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
-        self.locales = kwargs.pop('locales', [l[0] for l in settings.LANGUAGES])
+        self.locales = kwargs.pop('locales', [loc[0] for loc in settings.LANGUAGES])
         self.one_required = kwargs.get('required', True)
         require_all_fields = kwargs.pop('require_all_fields', False)
         kwargs['required'] = False
