@@ -50,6 +50,7 @@ def test_serialization_json():
     # test that book survives being serialized
     old_book = Book.objects.get(pk=1)
     serialized_book = serializers.serialize("json", Book.objects.filter(pk=1))
+
     for book in serializers.deserialize("json", serialized_book):
         new_book = book.object
         break
@@ -89,3 +90,27 @@ def test_serialization_yaml():
         break
 
     assert old_book == new_book
+
+
+def test_initializing_with_string_only():
+    json = """
+[
+  {
+    "model": "testapp.book",
+    "pk": 1,
+    "fields": {
+      "title": "Der Herr der Ringe",
+      "abstract": "Frodo will einen Ring zerstören",
+      "author": 1
+    }
+  }
+]
+"""
+
+    for book in serializers.deserialize("json", json):
+        assert isinstance(book.object.title, LazyI18nString)
+        assert book.object.title.data == "Der Herr der Ringe"
+        assert isinstance(book.object.abstract, LazyI18nString)
+        assert book.object.abstract.data == "Frodo will einen Ring zerstören"
+
+        break
