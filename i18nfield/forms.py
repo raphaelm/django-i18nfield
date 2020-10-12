@@ -260,7 +260,8 @@ class I18nFormSetMixin:
             prefix=self.add_prefix('__prefix__'),
             empty_permitted=True,
             use_required_attribute=False,
-            locales=self.locales
+            locales=self.locales,
+            **self.get_form_kwargs(None),
         )
         self.add_fields(form, None)
         return form
