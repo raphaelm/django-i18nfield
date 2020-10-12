@@ -42,6 +42,10 @@ class I18nFieldMixin:
         def from_db_value(self, value, expression, connection):
             return LazyI18nString(value)
 
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.get_prep_value(value)
+
     def formfield(self, **kwargs):
         defaults = {'form_class': self.form_class, 'widget': self.widget}
         defaults.update(kwargs)
