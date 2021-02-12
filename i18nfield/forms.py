@@ -77,10 +77,12 @@ class I18nWidget(forms.MultiWidget):
             except IndexError:
                 widget_value = None
             if id_:
+                human_locale_name = dict(settings.LANGUAGES).get(self.locales[i], self.locales[i])
                 final_attrs = dict(
                     final_attrs,
                     id='%s_%s' % (id_, i),
-                    title=self.locales[i]
+                    title=human_locale_name,
+                    placeholder=human_locale_name,
                 )
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
         return mark_safe(self.format_output(output))
