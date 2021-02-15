@@ -10,4 +10,4 @@ isort
 flake8
 lxml==4.3.*
 html5lib
-
+PyYAML
