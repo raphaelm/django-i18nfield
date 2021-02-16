@@ -82,8 +82,9 @@ class I18nWidget(forms.MultiWidget):
                     final_attrs,
                     id='%s_%s' % (id_, i),
                     title=human_locale_name,
-                    placeholder=human_locale_name,
                 )
+                # still allow forms to override the placeholder
+                final_attrs.setdefault('placeholder', human_locale_name)
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
         return mark_safe(self.format_output(output))
 
