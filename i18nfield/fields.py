@@ -12,10 +12,6 @@ class I18nFieldMixin:
     form_class = I18nFormField
     widget = I18nTextInput
 
-    def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop('event', None)
-        super().__init__(*args, **kwargs)
-
     def to_python(self, value):
         if isinstance(value, LazyI18nString):
             return value
