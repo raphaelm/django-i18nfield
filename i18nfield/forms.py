@@ -76,16 +76,14 @@ class I18nWidget(forms.MultiWidget):
                 widget_value = value[i]
             except IndexError:
                 widget_value = None
+            final_attrs_widget = final_attrs.copy()
             if id_:
                 human_locale_name = dict(settings.LANGUAGES).get(self.locales[i], self.locales[i])
-                final_attrs = dict(
-                    final_attrs,
-                    id='%s_%s' % (id_, i),
-                    title=human_locale_name,
-                )
+                final_attrs_widget['id'] = '%s_%s' % (id_, i)
+                final_attrs_widget['title'] = human_locale_name
                 # still allow forms to override the placeholder
-                final_attrs.setdefault('placeholder', human_locale_name)
-            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
+                final_attrs_widget.setdefault('placeholder', human_locale_name)
+            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs_widget, renderer=renderer))
         return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets) -> str:
