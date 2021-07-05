@@ -64,6 +64,9 @@ class I18nWidget(forms.MultiWidget):
                 widget.is_localized = self.is_localized
         # value is a list of values, each corresponding to a widget
         # in self.widgets.
+
+        original_value = value
+
         if not isinstance(value, list):
             value = self.decompress(value)
         output = []
@@ -76,6 +79,21 @@ class I18nWidget(forms.MultiWidget):
                 widget_value = value[i]
             except IndexError:
                 widget_value = None
+
+            if not widget_value and isinstance(original_value, LazyI18nString):
+                locale = self.locales[i]
+                firstpart = locale.split('-')[0]
+
+                if not widget_value:
+                    similar = [
+                        loc for loc in self.locales
+                        if (loc.startswith(firstpart + "-") or firstpart == loc) and loc != locale
+                    ]
+                    for s in similar:
+                        if original_value.data.get(s) and s not in self.enabled_locales:
+                            widget_value = original_value.data.get(s)
+                            break
+
             final_attrs_widget = final_attrs.copy()
             if id_:
                 human_locale_name = dict(settings.LANGUAGES).get(self.locales[i], self.locales[i])
