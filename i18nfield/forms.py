@@ -80,7 +80,7 @@ class I18nWidget(forms.MultiWidget):
             except IndexError:
                 widget_value = None
 
-            if not widget_value and isinstance(original_value, LazyI18nString):
+            if not widget_value and isinstance(original_value, LazyI18nString) and isinstance(original_value.data, dict):
                 locale = self.locales[i]
                 firstpart = locale.split('-')[0]
 
