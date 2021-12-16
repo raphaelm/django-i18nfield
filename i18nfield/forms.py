@@ -3,6 +3,7 @@ from typing import List, Union
 import copy
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms import (
     BaseForm, BaseInlineFormSet, BaseModelForm, BaseModelFormSet,
 )
@@ -210,6 +211,25 @@ class I18nFormField(forms.MultiValueField):
             fields=fields, require_all_fields=False, *args, **kwargs
         )
         self.require_all_fields = require_all_fields
+
+    def has_changed(self, initial, data):
+        if self.disabled:
+            return False
+        if initial is None:
+            initial = ['' for x in range(0, len(data))]
+        else:
+            if not isinstance(initial, list):
+                initial = self.widget.decompress(initial)
+        for field, initial, data in zip(self.fields, initial, data):
+            if field.locale not in self.widget.enabled_locales:
+                continue
+            try:
+                initial = field.to_python(initial)
+            except ValidationError:
+                return True
+            if field.has_changed(initial, data):
+                return True
+        return False
 
 
 class I18nFormMixin:
