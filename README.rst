@@ -44,10 +44,10 @@ Features
 * Integration with Django Restframework
 * Comprehensive test suite and production-tested
 
-Compatible with:
+Tested with:
 
-* Python 3.4 to 3.7
-* Django 1.11 to 2.2
+* Python 3.6 to 3.10
+* Django 3.2 to 4.0
 
 License
 -------
