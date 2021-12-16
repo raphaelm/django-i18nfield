@@ -83,7 +83,8 @@ class LazyI18nString:
                 else:
                     return ""
         else:
-            return str(self.data)
+            with override(lng):
+                return str(self.data)
 
     def map(self, f):
         """
