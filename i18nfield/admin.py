@@ -1,6 +1,6 @@
 from django.contrib.admin import ModelAdmin
-from . import fields
-from . import forms
+
+from . import fields, forms
 
 
 class I18nModelAdmin(ModelAdmin):
@@ -16,4 +16,3 @@ class I18nModelAdmin(ModelAdmin):
         # classes to override them using formfield_overrides_defaults.
         for k, v in self.formfield_overrides_defaults.items():
             self.formfield_overrides.setdefault(k, v)
-

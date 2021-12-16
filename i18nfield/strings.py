@@ -1,6 +1,6 @@
-import json
 from typing import Dict, Optional, Union
 
+import json
 from django.conf import settings
 from django.utils import translation
 from django.utils.translation import gettext, override

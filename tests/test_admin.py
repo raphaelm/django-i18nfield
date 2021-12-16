@@ -1,6 +1,5 @@
 from i18nfield.admin import I18nModelAdmin
-from i18nfield.fields import I18nCharField
-from i18nfield.fields import I18nTextField
+from i18nfield.fields import I18nCharField, I18nTextField
 
 from .testapp.models import Author
 
