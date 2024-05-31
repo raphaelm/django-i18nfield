@@ -1,14 +1,15 @@
 pypi:
     script:
-        - cp /keys/.pypirc ~/.pypirc
-        - virtualenv env
-        - source env/bin/activate
-        - XDG_CACHE_HOME=/cache pip3 install -U pip setuptools wheel
-        - XDG_CACHE_HOME=/cache pip3 install -r requirements_dev.txt
+        - cat $PYPIRC > ~/.pypirc
+        - pip install -U pip uv
+        - uv pip install --system -U setuptools wheel twine
+        - uv pip install --system -r requirements_dev.txt
         - python setup.py sdist develop
         - python setup.py sdist clean
-        - python setup.py sdist upload
-        - python setup.py bdist_wheel upload
+        - python setup.py sdist
+        - python setup.py bdist_wheel
+        - twine check dist/*
+        - twine check upload/*
     tags:
         - python3
     only:
