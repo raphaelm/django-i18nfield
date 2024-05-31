@@ -1,4 +1,6 @@
 pypi:
+    image:
+        name: pretix/ci-image
     script:
         - cat $PYPIRC > ~/.pypirc
         - pip install -U pip uv
@@ -10,8 +12,6 @@ pypi:
         - python setup.py bdist_wheel
         - twine check dist/*
         - twine check upload/*
-    tags:
-        - python3
     only:
         - pypi
     artifacts:
