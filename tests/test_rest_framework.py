@@ -34,6 +34,7 @@ def test_i18n_field_representation(value, expected):
     (LazyI18nString({'en': 'foo'}), {'en': 'foo'}),
     (LazyI18nString({'de': 'etwas'}), {'de': 'etwas'}),
     (None, {'xz': 'etwas'}),
+    (None, {'xz': 2}),
     (None, 1.5),
 ))
 def test_i18n_field_internalisation(value, expected):
