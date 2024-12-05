@@ -8,6 +8,6 @@ sphinx
 sphinx-autobuild
 isort
 flake8
-lxml==4.3.*
+lxml
 html5lib
 PyYAML
