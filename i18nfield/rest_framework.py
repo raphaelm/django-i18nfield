@@ -54,6 +54,8 @@ class I18nField(Field):
         if isinstance(data, str):
             return LazyI18nString(data)
         elif isinstance(data, dict):
+            if any([not isinstance(v, str) for v in data.values()]):
+                raise ValidationError('All entries must be strings.')
             if any([k not in dict(settings.LANGUAGES) for k in data.keys()]):
                 raise ValidationError('Invalid languages included.')
             return LazyI18nString(data)
