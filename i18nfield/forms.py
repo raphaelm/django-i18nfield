@@ -103,11 +103,12 @@ class I18nWidget(forms.MultiWidget):
                 # still allow forms to override the placeholder
                 final_attrs_widget.setdefault('placeholder', human_locale_name)
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs_widget, renderer=renderer))
-        return mark_safe(self.format_output(output))
+        return mark_safe(self.format_output(output, id_))
 
-    def format_output(self, rendered_widgets) -> str:
-        return '<div class="i18n-form-group%s">%s</div>' % (
+    def format_output(self, rendered_widgets, id_) -> str:
+        return '<div class="i18n-form-group%s" id="%s">%s</div>' % (
             ' i18n-form-single-language' if len(rendered_widgets) <= 1 else '',
+            id_,
             ''.join(rendered_widgets),
         )
 
