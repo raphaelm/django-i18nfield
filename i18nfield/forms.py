@@ -9,6 +9,7 @@ from django.forms import (
 )
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from .strings import LazyI18nString
@@ -108,7 +109,7 @@ class I18nWidget(forms.MultiWidget):
     def format_output(self, rendered_widgets, id_) -> str:
         return '<div class="i18n-form-group%s" id="%s">%s</div>' % (
             ' i18n-form-single-language' if len(rendered_widgets) <= 1 else '',
-            id_,
+            esacpe(id_,
             ''.join(rendered_widgets),
         )
 
