@@ -109,7 +109,7 @@ class I18nWidget(forms.MultiWidget):
     def format_output(self, rendered_widgets, id_) -> str:
         return '<div class="i18n-form-group%s" id="%s">%s</div>' % (
             ' i18n-form-single-language' if len(rendered_widgets) <= 1 else '',
-            esacpe(id_),
+            escape(id_),
             ''.join(rendered_widgets),
         )
 
