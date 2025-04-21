@@ -51,3 +51,15 @@ consist of multiple language fields, one for each language. They don't look nice
 and Django admin does not know how to deal with them so far. Also, they no longer
 contain standard python strings but ``LazyI18nStrings`` which have some special property.
 But luckily for you, we wrote more pages in this documentation, go ahead and check them out. :)
+
+Right-to-left languages
+-----------------------
+
+To support right-to-left languages, we recommend adding CSS like this to your app:
+
+.. code-block:: css
+
+    input[lang=ar], textarea[lang=ar], div[lang=ar], pre[lang=ar],
+    input[lang=hw], textarea[lang=hw], div[lang=hw], pre[lang=hw] {
+      direction: rtl;
+    }
