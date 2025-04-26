@@ -55,11 +55,9 @@ But luckily for you, we wrote more pages in this documentation, go ahead and che
 Right-to-left languages
 -----------------------
 
-To support right-to-left languages, we recommend adding CSS like this to your app:
+Right-to-left languages are supported out of the box, by setting the
+``dir`` attribute on all our fields according to the language. To
+decide if a language is right-to-left, we rely on the Django setting
+`LANGUAGES_BIDI`_, which you can adapt to your needs if necessary.
 
-.. code-block:: css
-
-    input[lang=ar], textarea[lang=ar], div[lang=ar], pre[lang=ar],
-    input[lang=hw], textarea[lang=hw], div[lang=hw], pre[lang=hw] {
-      direction: rtl;
-    }
+.. _LANGUAGES_BIDI: https://docs.djangoproject.com/en/stable/ref/settings/#languages-bidi

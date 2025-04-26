@@ -31,6 +31,7 @@ class I18nWidget(forms.MultiWidget):
         for lng in self.locales:
             a = copy.copy(attrs) or {}
             a['lang'] = lng
+            a['dir'] = 'ltr' if lng not in settings.LANGUAGES_BIDI else 'rtl'
             widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
 
