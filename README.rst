@@ -46,8 +46,8 @@ Features
 
 Tested with:
 
-* Python 3.6 to 3.10
-* Django 3.2 to 4.0
+* Python 3.9 to 3.13
+* Django supported versions: 4.2, 5.1 and 5.2
 
 License
 -------
