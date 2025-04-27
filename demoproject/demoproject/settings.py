@@ -69,4 +69,5 @@ LANGUAGES = [
     ('de', _('German')),
     ('en', _('English')),
     ('fr', _('French')),
+    ('he', _('Hebrew')),
 ]
