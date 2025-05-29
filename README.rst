@@ -52,7 +52,7 @@ Tested with:
 Security
 --------
 
-If you discover a security issue, please contact us at security@pretix.eu and see our [Responsible Disclosure Policy](https://docs.pretix.eu/trust/security/disclosure/) further information.
+If you discover a security issue, please contact us at security@pretix.eu and see our `Responsible Disclosure Policy`_ further information.
 
 License
 -------
@@ -69,3 +69,4 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 .. _django-parler: https://github.com/django-parler/django-parler
 .. _nece: https://pypi.python.org/pypi/nece
 .. _1NF: https://en.wikipedia.org/wiki/First_normal_form
+.. Responsible Disclosure Policy: https://docs.pretix.eu/trust/security/disclosure/
