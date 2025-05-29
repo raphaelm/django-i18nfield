@@ -69,4 +69,4 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 .. _django-parler: https://github.com/django-parler/django-parler
 .. _nece: https://pypi.python.org/pypi/nece
 .. _1NF: https://en.wikipedia.org/wiki/First_normal_form
-.. Responsible Disclosure Policy: https://docs.pretix.eu/trust/security/disclosure/
+.. _Responsible Disclosure Policy: https://docs.pretix.eu/trust/security/disclosure/
