@@ -49,6 +49,11 @@ Tested with:
 * Python 3.6 to 3.10
 * Django 3.2 to 4.0
 
+Security
+--------
+
+If you discover a security issue, please contact us at security@pretix.eu and see our [Responsible Disclosure Policy](https://docs.pretix.eu/trust/security/disclosure/) further information.
+
 License
 -------
 The code in this repository is published under the terms of the Apache License. 
