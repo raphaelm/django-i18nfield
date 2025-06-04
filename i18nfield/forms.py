@@ -11,6 +11,7 @@ from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.text import normalize_newlines
 
 from .strings import LazyI18nString
 
@@ -229,7 +230,7 @@ class I18nFormField(forms.MultiValueField):
                 initial = field.to_python(initial)
             except ValidationError:
                 return True
-            if field.has_changed(initial, data):
+            if field.has_changed(normalize_newlines(initial), normalize_newlines(data)):
                 return True
         return False
 
