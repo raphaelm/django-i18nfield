@@ -1,6 +1,7 @@
 import pytest
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
+from django.test import override_settings
 from lxml.html import html5parser
 
 from i18nfield.forms import (
@@ -130,13 +131,32 @@ def test_widget():
     rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'Hello'}))
     tree = html5parser.fromstring(rendered)
     assert tree[0].attrib == {
-        'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
+        'lang': 'de', 'dir': 'ltr', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
     }
     assert tree[1].attrib == {
-        'lang': 'en', 'name': 'foo_1', 'type': 'text', 'value': 'Hello'
+        'lang': 'en', 'dir': 'ltr', 'name': 'foo_1', 'type': 'text', 'value': 'Hello'
     }
     assert tree[2].attrib == {
-        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+        'lang': 'fr', 'dir': 'ltr', 'name': 'foo_2', 'type': 'text'
+    }
+
+
+def test_widget_rtl():
+    with override_settings(
+        LANGUAGES=[
+            ('he', 'Hebrew'),
+            ('en', 'English'),
+        ]
+    ):
+        f = I18nFormField(widget=I18nTextInput, required=False, localize=True)
+        rendered = f.widget.render('foo', LazyI18nString({'he': 'שלום', 'en': 'Hello'}))
+
+    tree = html5parser.fromstring(rendered)
+    assert tree[0].attrib == {
+        'lang': 'he', 'dir': 'rtl', 'name': 'foo_0', 'type': 'text', 'value': 'שלום'
+    }
+    assert tree[1].attrib == {
+        'lang': 'en', 'dir': 'ltr', 'name': 'foo_1', 'type': 'text', 'value': 'Hello'
     }
 
 
@@ -145,13 +165,13 @@ def test_widget_empty():
     rendered = f.widget.render('foo', [])
     tree = html5parser.fromstring(rendered)
     assert tree[0].attrib == {
-        'lang': 'de', 'name': 'foo_0', 'type': 'text'
+        'lang': 'de', 'dir': 'ltr', 'name': 'foo_0', 'type': 'text'
     }
     assert tree[1].attrib == {
-        'lang': 'en', 'name': 'foo_1', 'type': 'text'
+        'lang': 'en', 'dir': 'ltr', 'name': 'foo_1', 'type': 'text'
     }
     assert tree[2].attrib == {
-        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+        'lang': 'fr', 'dir': 'ltr', 'name': 'foo_2', 'type': 'text'
     }
 
 
@@ -175,10 +195,31 @@ def test_widget_enabled_locales():
 
     tree = html5parser.fromstring(rendered)
     assert tree[0].attrib == {
-        'lang': 'de', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
+        'lang': 'de', 'dir': 'ltr', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
     }
     assert tree[1].attrib == {
-        'lang': 'fr', 'name': 'foo_2', 'type': 'text'
+        'lang': 'fr', 'dir': 'ltr', 'name': 'foo_2', 'type': 'text'
+    }
+
+
+def test_widget_enabled_locales_rtl():
+    with override_settings(
+        LANGUAGES=[
+            ('de', 'German'),
+            ('en', 'English'),
+            ('he', 'Hebrew'),
+        ]
+    ):
+        f = I18nFormField(widget=I18nTextInput, required=False)
+        f.widget.enabled_locales = ['de', 'he']
+        rendered = f.widget.render('foo', LazyI18nString({'de': 'Hallo', 'en': 'hello'}))
+
+    tree = html5parser.fromstring(rendered)
+    assert tree[0].attrib == {
+        'lang': 'de', 'dir': 'ltr', 'name': 'foo_0', 'type': 'text', 'value': 'Hallo'
+    }
+    assert tree[1].attrib == {
+        'lang': 'he', 'dir': 'rtl', 'name': 'foo_2', 'type': 'text'
     }
 
 
