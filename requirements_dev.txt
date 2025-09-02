@@ -4,6 +4,7 @@ djangorestframework
 tox
 coverage
 codecov
+pytest-cov
 sphinx
 sphinx-autobuild
 isort

@@ -1,2 +1,2 @@
 -r requirements_dev.txt
-django==2.2.*
+django==5.2.*
