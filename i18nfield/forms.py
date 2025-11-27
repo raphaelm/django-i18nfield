@@ -9,6 +9,7 @@ from django.forms import (
 )
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
+from django.utils.functional import lazy
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -192,8 +193,7 @@ class I18nFormField(forms.MultiValueField):
         return out
 
     def __init__(self, *args, **kwargs):
-        fields = []
-        self.__defaults = {
+        defaults = {
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
@@ -204,39 +204,34 @@ class I18nFormField(forms.MultiValueField):
         kwargs['widget'] = kwargs['widget'](
             locales=self.locales, field=self, **kwargs.pop('widget_kwargs', {})
         )
-        self.__defaults.update(**kwargs)
+        defaults.update(**kwargs)
 
         # Performance hack: In theory, we'd need to generate the subfields in __init__. However, that uses many
         # useless CPU cycles at form definition time, since it causes a __deepcopy__ on the widget, which is slow.
         # If your codebase contains hundreds of I18nFormField instances, this makes a difference on process startup.
         # We do it in __deepcopy__ instead, which is executed when the field is first bound to a real form.
+        def generate_fields():
+            fields = []
+            for lngcode in self.locales:
+                d = {**defaults, 'label': '%s (%s)' % (defaults.get('label'), lngcode)}
+                field = forms.CharField(**d)
+                field.locale = lngcode
+                field.error_messages.setdefault("incomplete", self.error_messages["incomplete"])
+                if self.disabled:
+                    field.disabled = True
+                if self.require_all_fields:
+                    # Set 'required' to False on the individual fields, because the
+                    # required validation will be handled by MultiValueField, not
+                    # by those individual fields.
+                    field.required = False
+                fields.append(field)
+            return fields
+
         super().__init__(
-            fields=fields, require_all_fields=False, *args, **kwargs
+            fields=[], require_all_fields=False, *args, **kwargs
         )
+        self.fields = lazy(generate_fields, list)()
         self.require_all_fields = require_all_fields
-
-    def __deepcopy__(self, memo):
-        # Performance hack: In theory, we'd need to generate the subfields in __init__. However, that uses many
-        # useless CPU cycles at form definition time, since it causes a __deepcopy__ on the widget, which is slow.
-        # If your codebase contains hundreds of I18nFormField instances, this makes a difference on process startup.
-        # We do it in __deepcopy__ instead, which is executed when the field is first bound to a real form.
-        result = super().__deepcopy__(memo)
-        fields = []
-        for lngcode in result.locales:
-            d = {**self.__defaults, 'label': '%s (%s)' % (self.__defaults.get('label'), lngcode)}
-            field = forms.CharField(**d)
-            field.locale = lngcode
-            field.error_messages.setdefault("incomplete", self.error_messages["incomplete"])
-            if self.disabled:
-                field.disabled = True
-            if self.require_all_fields:
-                # Set 'required' to False on the individual fields, because the
-                # required validation will be handled by MultiValueField, not
-                # by those individual fields.
-                field.required = False
-            fields.append(field)
-        result.fields = tuple(fields)
-        return result
 
     def has_changed(self, initial, data):
         if self.disabled:
