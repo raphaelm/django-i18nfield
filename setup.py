@@ -41,6 +41,7 @@ setup(
 
     keywords='i18n strings database models',
     install_requires=[
+        'Django>=4.2',
     ],
 
     packages=find_packages(exclude=['tests', 'tests.*', 'demoproject', 'demoproject.*']),
