@@ -139,9 +139,7 @@ class LazyI18nStringMigrationSerializer(BaseSerializer):
         imports = {"from i18nfield import LazyI18nString"}
 
         if isinstance(self.value.data, LazyI18nString.LazyGettextProxy):
-            imports.add("from django.utils.translation import gettext_noop")
-
-            return 'LazyI18nString.from_gettext(gettext_noop({}))'.format(repr("Value not represented in migration to avoid noise, since Django does not write default= to the DB anyways")), imports
+            return 'LazyI18nString({})'.format(repr("Value not represented in migration to avoid noise, since Django does not write default= to the DB anyways")), imports
 
         return "LazyI18nString({})".format(repr(self.value.data)), imports
 
