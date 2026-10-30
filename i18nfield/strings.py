@@ -2,6 +2,8 @@ from typing import Dict, Optional, Union
 
 import json
 from django.conf import settings
+from django.db.migrations.serializer import BaseSerializer
+from django.db.migrations.writer import MigrationWriter
 from django.utils import translation
 from django.utils.translation import gettext, override
 
@@ -130,3 +132,18 @@ class LazyI18nString:
         result = LazyI18nString({})
         result.data = cls.LazyGettextProxy(lazygettext)
         return result
+
+
+class LazyI18nStringMigrationSerializer(BaseSerializer):
+    def serialize(self):
+        imports = {"from i18nfield import LazyI18nString"}
+
+        if isinstance(self.value.data, LazyI18nString.LazyGettextProxy):
+            imports.add("from django.utils.translation import gettext_noop")
+
+            return 'LazyI18nString.from_gettext(gettext_noop({}))'.format(repr("Value not represented in migration to avoid noise, since Django does not write default= to the DB anyways")), imports
+
+        return "LazyI18nString({})".format(repr(self.value.data)), imports
+
+
+MigrationWriter.register_serializer(LazyI18nString, LazyI18nStringMigrationSerializer)
