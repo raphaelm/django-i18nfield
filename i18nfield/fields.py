@@ -20,7 +20,7 @@ class I18nFieldMixin:
             return [
                 checks.Error(
                     "LazyGettextProxy as db_default is unsupported since the migration system will not learn of translation changes.",
-                    hint="Use default? instead of db_default.",
+                    hint="Use default= instead of db_default.",
                     obj=self,
                     id="i18nfield.E001",
                 )
