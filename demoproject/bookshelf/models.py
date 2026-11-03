@@ -18,7 +18,7 @@ class Book(models.Model):
     author = models.ForeignKey(Author, verbose_name='Author', on_delete=models.PROTECT)
     description = I18nTextField(
         verbose_name='Description',
-        default=LazyI18nString.from_gettext(gettext_noop("Default description")),
+        default=LazyI18nString.from_gettext(gettext_noop("Default descriptionss")),
     )
 
     def __str__(self):
