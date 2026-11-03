@@ -2,6 +2,8 @@ from typing import Dict, Optional, Union
 
 import json
 from django.conf import settings
+from django.db.migrations.serializer import BaseSerializer
+from django.db.migrations.writer import MigrationWriter
 from django.utils import translation
 from django.utils.translation import gettext, override
 
@@ -130,3 +132,33 @@ class LazyI18nString:
         result = LazyI18nString({})
         result.data = cls.LazyGettextProxy(lazygettext)
         return result
+
+    @classmethod
+    def from_gettext_evaluated(cls, src_text) -> 'LazyI18nString':
+        data = {}
+        for l, _ in settings.LANGUAGES:
+            with override(l):
+                translated_text = gettext(src_text)
+            if translated_text and translated_text != src_text:
+                data[l] = translated_text
+        if "en" not in data or not data:
+            data["en"] = src_text
+        result = LazyI18nString(data)
+        return result
+
+
+class LazyI18nStringMigrationSerializer(BaseSerializer):
+    def serialize(self):
+        imports = {
+            "from i18nfield.strings import LazyI18nString"
+        }
+        data = self.value.data
+
+        if isinstance(self.value.data, LazyI18nString.LazyGettextProxy):
+            # Translate at time of makemigrations
+            return "LazyI18nString.from_gettext_evaluated({})".format(repr(self.value.data.lazygettext)), imports
+
+        return "LazyI18nString({})".format(repr(data)), imports
+
+
+MigrationWriter.register_serializer(LazyI18nString, LazyI18nStringMigrationSerializer)

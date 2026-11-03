@@ -1,7 +1,8 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext_noop
 
 from i18nfield.fields import I18nCharField, I18nTextField
+from i18nfield.strings import LazyI18nString
 
 
 class Author(models.Model):
@@ -15,6 +16,10 @@ class Book(models.Model):
     title = I18nCharField(verbose_name='Book title', max_length=190)
     abstract = I18nTextField(verbose_name='Abstract')
     author = models.ForeignKey(Author, verbose_name='Author', on_delete=models.PROTECT)
+    description = I18nTextField(
+        verbose_name='Description',
+        default=LazyI18nString.from_gettext(gettext_noop("Default descriptionss")),
+    )
 
     def __str__(self):
         return str(self.title)

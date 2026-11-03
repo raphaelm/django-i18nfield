@@ -1,6 +1,10 @@
+from typing import Any
+
 import django
 import json
 from django.conf import settings
+from django.core import checks
+from django.core.checks import CheckMessage
 from django.db import models
 
 from .forms import I18nFormField, I18nTextarea, I18nTextInput
@@ -10,6 +14,18 @@ from .strings import LazyI18nString
 class I18nFieldMixin:
     form_class = I18nFormField
     widget = I18nTextInput
+
+    def check(self, **kwargs: Any) -> list[CheckMessage]:
+        if self.db_default and isinstance(self.db_default, LazyI18nString) and isinstance(self.db_default.data, LazyI18nString.LazyGettextProxy):
+            return [
+                checks.Error(
+                    "LazyGettextProxy as db_default is unsupported since the migration system will not learn of translation changes.",
+                    hint="Use default= instead of db_default.",
+                    obj=self,
+                    id="i18nfield.E001",
+                )
+            ]
+        return []
 
     def to_python(self, value):
         if isinstance(value, LazyI18nString):
